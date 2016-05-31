@@ -16,4 +16,11 @@ public class OscarPresenter {
         this.view = view;
         model = new FileBackendModel();
     }
+
+    /**
+     * fills the current view with the data from the model
+     */
+    public void fillView() {
+
+    }
 }
