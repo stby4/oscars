@@ -1,9 +1,10 @@
 package ch.fhnw.oop.oscar.view.javafx;
 
 import ch.fhnw.oop.oscar.model.Movie;
-import ch.fhnw.oop.oscar.model.filebackend.MovieEdited;
+import ch.fhnw.oop.oscar.model.MovieEdited;
+import ch.fhnw.oop.oscar.view.OscarView;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -12,15 +13,37 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 
+import java.util.ResourceBundle;
+
 /**
  * MovieFXSelector
  * Created by Hinrich on 31.05.2016.
  */
 class MovieFXSelector<T extends Movie> extends TableView {
+    private final ResourceBundle STRINGS =  ResourceBundle.getBundle("view.javafx.Strings");
+    private OscarView parent;
+
+    private TableColumn editedCol;
+    private TableColumn<T, Integer> yearAwardCol;
+    private TableColumn<T, String> titleCol;
+    TableColumn<T, String> directorCol;
+    TableColumn<T, String> actorsCol;
 
     @SuppressWarnings("unchecked")
-    MovieFXSelector() {
-        TableColumn editedCol = new TableColumn();
+    MovieFXSelector(OscarView parent) {
+        this.parent = parent;
+
+        initializeControls();
+        layoutControls();
+        addEventHandlers();
+        addValueChangeListeners();
+        addBindings();
+    }
+
+
+    private void initializeControls() {
+
+        editedCol = new TableColumn();
         editedCol.setCellValueFactory(new PropertyValueFactory("edited"));
         //editedCol.setPrefWidth(16);
         editedCol.setCellFactory(new Callback<TableColumn<T, MovieEdited>, TableCell<T, MovieEdited>>() {
@@ -49,36 +72,38 @@ class MovieFXSelector<T extends Movie> extends TableView {
         });
 
 
-        TableColumn<T, Integer> yearAwardCol = new TableColumn<>("Jahr");
+        yearAwardCol = new TableColumn<>(STRINGS.getString("Year"));
         yearAwardCol.setCellValueFactory(new PropertyValueFactory<T, Integer>("yearAward"));
 
-        TableColumn<T, String> titleCol = new TableColumn<>("Titel");
+        titleCol = new TableColumn<>(STRINGS.getString("Title"));
         titleCol.setCellValueFactory(new PropertyValueFactory<T, String>("title"));
 
-        TableColumn<T, String> directorCol = new TableColumn<>("Regisseur");
+        directorCol = new TableColumn<>(STRINGS.getString("Director"));
         directorCol.setCellValueFactory(new PropertyValueFactory<T, String>("director"));
 
-        TableColumn<T, String> actorsCol = new TableColumn<>("Hauptdarsteller");
+        actorsCol = new TableColumn<>(STRINGS.getString("Actors"));
         actorsCol.setCellValueFactory(new PropertyValueFactory<T, String>("actors"));
-
-        getColumns().setAll(editedCol, yearAwardCol, titleCol, directorCol, actorsCol);
     }
 
-
-    private void initializeControls() {
-
-    }
-
+    @SuppressWarnings("unchecked")
     private void layoutControls() {
+        getColumns().setAll(editedCol, yearAwardCol, titleCol, directorCol, actorsCol);
 
     }
 
     private void addEventHandlers() {
-
     }
 
+    @SuppressWarnings("unchecked")
     private void addValueChangeListeners() {
-
+        getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                if(null != newValue && newValue instanceof Movie) {
+                    parent.onMovieSelected((Movie) newValue);
+                }
+            }
+        });
     }
 
     private void addBindings() {

@@ -1,6 +1,5 @@
 package ch.fhnw.oop.oscar.model;
 
-import ch.fhnw.oop.oscar.model.filebackend.MovieEdited;
 import javafx.beans.property.*;
 
 import java.util.List;
@@ -41,6 +40,24 @@ public class Movie {
         setNumberOscars(Integer.valueOf(line.get(12)));
 
         edited.set(new MovieEdited(false));
+
+        addListeners();
+    }
+
+    private void addListeners() {
+        id.addListener(e -> setEdited(true));
+        title.addListener(e -> setEdited(true));
+        titleEn.addListener(e -> setEdited(true));
+        yearAward.addListener(e -> setEdited(true));
+        yearProduction.addListener(e -> setEdited(true));
+        director.addListener(e -> setEdited(true));
+        actors.addListener(e -> setEdited(true));
+        countries.addListener(e -> setEdited(true));
+        duration.addListener(e -> setEdited(true));
+        fsk.addListener(e -> setEdited(true));
+        genre.addListener(e -> setEdited(true));
+        startDate.addListener(e -> setEdited(true));
+        numberOscars.addListener(e -> setEdited(true));
     }
 
     public int getId() {

@@ -1,15 +1,21 @@
 package ch.fhnw.oop.oscar.view.javafx;
 
+import ch.fhnw.oop.oscar.model.Movie;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * OscarFXApplication
  * Created by Hinrich on 31.05.2016.
  */
 public class OscarFXApplication extends Application {
+    private final ResourceBundle STRINGS =  ResourceBundle.getBundle("view.javafx.Strings");
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent parent = new OscarFXView();
@@ -17,7 +23,7 @@ public class OscarFXApplication extends Application {
         String url = getClass().getResource("oscars.css").toExternalForm();
         scene.getStylesheets().add(url);
 
-        primaryStage.setTitle("Oscars");
+        primaryStage.setTitle(STRINGS.getString("Oscars"));
         primaryStage.setScene(scene);
         primaryStage.show();
     }

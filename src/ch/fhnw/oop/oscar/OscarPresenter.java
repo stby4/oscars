@@ -23,6 +23,4 @@ public class OscarPresenter {
     public void fillView() {
         view.setMovies(model.getMovies());
     }
-
-
 }

@@ -7,7 +7,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /**
@@ -16,9 +18,9 @@ import javafx.scene.layout.VBox;
  */
 class OscarFXView extends VBox implements OscarView {
     private final OscarPresenter presenter;
-    private TableView<Movie> movieSelector;
-    private Control toolBar;
-    private Pane movieDetails;
+    private MovieFXSelector<Movie> movieSelector;
+    private MovieFXTools toolBar;
+    private MovieFXDetails movieDetails;
 
     OscarFXView() {
         presenter = new OscarPresenter(this);
@@ -39,16 +41,27 @@ class OscarFXView extends VBox implements OscarView {
         movieSelector.setItems(movies);
     }
 
+    @Override
+    public void onMovieSelected(Movie movie) {
+        movieDetails.setMovie(movie);
+    }
+
     private void initializeControls() {
-        toolBar = new MovieFXTools();
-        movieSelector = new MovieFXSelector<>();
-        movieDetails = new MovieFXDetails();
+        toolBar = new MovieFXTools(this);
+        movieSelector = new MovieFXSelector<>(this);
+        movieDetails = new MovieFXDetails(this);
     }
 
     private void layoutControls() {
         SplitPane splitPane = new SplitPane();
+        //movieSelector.setPrefWidth();
         splitPane.getItems().add(0, movieSelector);
         splitPane.getItems().add(1, movieDetails);
+
+        VBox.setVgrow(splitPane, Priority.ALWAYS);
+        splitPane.setMaxWidth(Double.MAX_VALUE);
+        splitPane.setMaxHeight(Double.MAX_VALUE);
+
 
         this.getChildren().add(0, toolBar);
         this.getChildren().add(1, splitPane);

@@ -1,4 +1,4 @@
-package ch.fhnw.oop.oscar.model.filebackend;
+package ch.fhnw.oop.oscar.model;
 
 /**
  * MovieEdited

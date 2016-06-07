@@ -1,5 +1,7 @@
 package ch.fhnw.oop.oscar.view.javafx;
 
+import ch.fhnw.oop.oscar.model.Movie;
+import ch.fhnw.oop.oscar.view.OscarView;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -7,11 +9,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
+import java.util.ResourceBundle;
+
 /**
  * Movie Tools
  * Created by Hinrich on 07.06.2016.
  */
 public class MovieFXTools extends ToolBar {
+    private final ResourceBundle STRINGS =  ResourceBundle.getBundle("view.javafx.Strings");
+    OscarView parent;
+
     private Button save;
 
     private Button add;
@@ -23,7 +30,9 @@ public class MovieFXTools extends ToolBar {
     private TextField search;
 
 
-    public MovieFXTools() {
+    public MovieFXTools(OscarView parent) {
+        this.parent = parent;
+
         initializeControls();
         layoutControls();
         addEventHandlers();
@@ -33,27 +42,29 @@ public class MovieFXTools extends ToolBar {
         Image imageSave = new Image("view/javafx/icons/save.svg.png", true);
         save = new Button();
         save.setGraphic(new ImageView(imageSave));
-        save.setTooltip(new Tooltip("Speichern"));
+        save.setTooltip(new Tooltip(STRINGS.getString("Save")));
 
         Image imageAdd = new Image("view/javafx/icons/add.svg.png", true);
         add = new Button();
         add.setGraphic(new ImageView(imageAdd));
-        add.setTooltip(new Tooltip("Hinzufügen"));
+        add.setTooltip(new Tooltip(STRINGS.getString("Add")));
 
         Image imageRemove = new Image("view/javafx/icons/remove.svg.png", true);
         remove = new Button();
         remove.setGraphic(new ImageView(imageRemove));
-        remove.setTooltip(new Tooltip("Entfernen"));
+        remove.setTooltip(new Tooltip(STRINGS.getString("Remove")));
 
         Image imageUndo = new Image("view/javafx/icons/undo.svg.png", true);
         undo = new Button();
         undo.setGraphic(new ImageView(imageUndo));
-        undo.setTooltip(new Tooltip("Rückgängig"));
+        undo.setTooltip(new Tooltip(STRINGS.getString("Undo")));
+        undo.setDisable(true);
 
         Image imageRedo = new Image("view/javafx/icons/redo.svg.png", true);
         redo = new Button();
         redo.setGraphic(new ImageView(imageRedo));
-        redo.setTooltip(new Tooltip("Wiederherstellen"));
+        redo.setTooltip(new Tooltip(STRINGS.getString("Redo")));
+        redo.setDisable(true);
 
         search = new TextField();
         search.setId("search_tf");
