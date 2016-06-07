@@ -1,8 +1,8 @@
 package ch.fhnw.oop.oscar.model;
 
+import ch.fhnw.oop.oscar.model.filebackend.MovieEdited;
 import javafx.beans.property.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +23,7 @@ public class Movie {
     private StringProperty genre = new SimpleStringProperty();
     private StringProperty startDate = new SimpleStringProperty();
     private IntegerProperty numberOscars = new SimpleIntegerProperty();
-    private BooleanProperty edited = new SimpleBooleanProperty();
+    private ObjectProperty<MovieEdited> edited = new SimpleObjectProperty<>();
 
     public Movie(List<String> line) {
         setId(Integer.valueOf(line.get(0)));
@@ -40,7 +40,7 @@ public class Movie {
         setStartDate(line.get(11));
         setNumberOscars(Integer.valueOf(line.get(12)));
 
-        setEdited(false);
+        setEdited(new MovieEdited(false));
     }
 
     public int getId() {
@@ -199,15 +199,15 @@ public class Movie {
         this.numberOscars.set(numberOscars);
     }
 
-    public boolean getEdited() {
+    public MovieEdited getEdited() {
         return edited.get();
     }
 
-    public BooleanProperty editedProperty() {
+    public ObjectProperty<MovieEdited> editedProperty() {
         return edited;
     }
 
-    public void setEdited(boolean edited) {
+    public void setEdited(MovieEdited edited) {
         this.edited.set(edited);
     }
 }

@@ -7,8 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableView;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -30,7 +28,7 @@ class OscarFXView extends VBox implements OscarView {
         addEventHandlers();
         addValueChangeListeners();
         addBindings();
-        //dataList = FXCollections.observableArrayList();
+
         // this must be the last call in the constructor
         presenter.fillView();
     }
