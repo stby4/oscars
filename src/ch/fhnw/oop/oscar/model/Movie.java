@@ -40,7 +40,7 @@ public class Movie {
         setStartDate(line.get(11));
         setNumberOscars(Integer.valueOf(line.get(12)));
 
-        setEdited(new MovieEdited(false));
+        edited.set(new MovieEdited(false));
     }
 
     public int getId() {
@@ -207,7 +207,7 @@ public class Movie {
         return edited;
     }
 
-    public void setEdited(MovieEdited edited) {
-        this.edited.set(edited);
+    public void setEdited(Boolean edit) {
+        this.edited.get().setEdited(edit);
     }
 }
