@@ -21,6 +21,8 @@ public class OscarPresenter {
      * fills the current view with the data from the model
      */
     public void fillView() {
-
+        view.setMovies(model.getMovies());
     }
+
+
 }

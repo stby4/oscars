@@ -1,14 +1,15 @@
 package ch.fhnw.oop.oscar.model;
 
+import javafx.collections.ObservableList;
+
 /**
  * Oscar model
  * Created by Hinrich on 31.05.2016.
  */
 public interface OscarModel {
     /**
-     * get movie by ID
-     * @param id ID of the movie
-     * @return Movie
+     * get movies
+     * @return movies
      */
-    Movie getMovie(int id);
+    ObservableList<Movie> getMovies();
 }

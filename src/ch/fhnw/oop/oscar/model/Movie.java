@@ -1,9 +1,6 @@
 package ch.fhnw.oop.oscar.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +23,7 @@ public class Movie {
     private StringProperty genre = new SimpleStringProperty();
     private StringProperty startDate = new SimpleStringProperty();
     private IntegerProperty numberOscars = new SimpleIntegerProperty();
+    private BooleanProperty edited = new SimpleBooleanProperty();
 
     public Movie(List<String> line) {
         setId(Integer.valueOf(line.get(0)));
@@ -41,6 +39,8 @@ public class Movie {
         setGenre(line.get(10));
         setStartDate(line.get(11));
         setNumberOscars(Integer.valueOf(line.get(12)));
+
+        setEdited(false);
     }
 
     public int getId() {
@@ -75,7 +75,7 @@ public class Movie {
         return titleEn;
     }
 
-    public void setTitleEn(String titleEn) {
+    private void setTitleEn(String titleEn) {
         this.titleEn.set(titleEn);
     }
 
@@ -87,7 +87,7 @@ public class Movie {
         return yearAward;
     }
 
-    public void setYearAward(int yearAward) {
+    private void setYearAward(int yearAward) {
         this.yearAward.set(yearAward);
     }
 
@@ -99,7 +99,7 @@ public class Movie {
         return yearProduction;
     }
 
-    public void setYearProduction(int yearProduction) {
+    private void setYearProduction(int yearProduction) {
         this.yearProduction.set(yearProduction);
     }
 
@@ -111,7 +111,7 @@ public class Movie {
         return director;
     }
 
-    public void setDirector(String director) {
+    private void setDirector(String director) {
         this.director.set(director);
     }
 
@@ -123,7 +123,7 @@ public class Movie {
         return actors;
     }
 
-    public void setActors(String actors) {
+    private void setActors(String actors) {
         this.actors.set(actors);
     }
 
@@ -135,7 +135,7 @@ public class Movie {
         return countries;
     }
 
-    public void setCountries(String countries) {
+    private void setCountries(String countries) {
         this.countries.set(countries);
     }
 
@@ -147,7 +147,7 @@ public class Movie {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    private void setDuration(int duration) {
         this.duration.set(duration);
     }
 
@@ -159,7 +159,7 @@ public class Movie {
         return fsk;
     }
 
-    public void setFsk(int fsk) {
+    private void setFsk(int fsk) {
         this.fsk.set(fsk);
     }
 
@@ -171,7 +171,7 @@ public class Movie {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    private void setGenre(String genre) {
         this.genre.set(genre);
     }
 
@@ -183,7 +183,7 @@ public class Movie {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    private void setStartDate(String startDate) {
         this.startDate.set(startDate);
     }
 
@@ -195,7 +195,19 @@ public class Movie {
         return numberOscars;
     }
 
-    public void setNumberOscars(int numberOscars) {
+    private void setNumberOscars(int numberOscars) {
         this.numberOscars.set(numberOscars);
+    }
+
+    public boolean getEdited() {
+        return edited.get();
+    }
+
+    public BooleanProperty editedProperty() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited.set(edited);
     }
 }

@@ -14,6 +14,8 @@ public class OscarFXApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent parent = new OscarFXView();
         Scene scene = new Scene(parent);
+        String url = getClass().getResource("oscars.css").toExternalForm();
+        scene.getStylesheets().add(url);
 
         primaryStage.setTitle("Oscars");
         primaryStage.setScene(scene);
