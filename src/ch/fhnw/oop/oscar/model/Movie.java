@@ -2,6 +2,9 @@ package ch.fhnw.oop.oscar.model;
 
 import javafx.beans.property.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 /**
@@ -20,9 +23,9 @@ public class Movie {
     private IntegerProperty duration = new SimpleIntegerProperty();
     private IntegerProperty fsk = new SimpleIntegerProperty();
     private StringProperty genre = new SimpleStringProperty();
-    private StringProperty startDate = new SimpleStringProperty();
+    private ObjectProperty<LocalDate> startDate = new SimpleObjectProperty<>();
     private IntegerProperty numberOscars = new SimpleIntegerProperty();
-    private ObjectProperty<MovieEdited> edited = new SimpleObjectProperty<>();
+    private ObjectProperty<Boolean> edited = new SimpleObjectProperty<>();
 
     public Movie(List<String> line) {
         setId(Integer.valueOf(line.get(0)));
@@ -36,10 +39,14 @@ public class Movie {
         setDuration(Integer.valueOf(line.get(8)));
         setFsk(Integer.valueOf(line.get(9)));
         setGenre(line.get(10));
-        setStartDate(line.get(11));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.uuuu");
+        try {
+            setStartDate(LocalDate.parse(line.get(11), formatter));
+        }catch (DateTimeParseException e) {
+            setStartDate(null);
+        }
         setNumberOscars(Integer.valueOf(line.get(12)));
-
-        edited.set(new MovieEdited(false));
+        setEdited(false);
 
         addListeners();
     }
@@ -192,15 +199,15 @@ public class Movie {
         this.genre.set(genre);
     }
 
-    public String getStartDate() {
+    public LocalDate getStartDate() {
         return startDate.get();
     }
 
-    public StringProperty startDateProperty() {
+    public ObjectProperty<LocalDate> startDateProperty() {
         return startDate;
     }
 
-    private void setStartDate(String startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate.set(startDate);
     }
 
@@ -216,15 +223,15 @@ public class Movie {
         this.numberOscars.set(numberOscars);
     }
 
-    public MovieEdited getEdited() {
+    public Boolean getEdited() {
         return edited.get();
     }
 
-    public ObjectProperty<MovieEdited> editedProperty() {
+    public ObjectProperty<Boolean> editedProperty() {
         return edited;
     }
 
-    public void setEdited(Boolean edit) {
-        this.edited.get().setEdited(edit);
+    public void setEdited(Boolean edited) {
+        this.edited.set(edited);
     }
 }

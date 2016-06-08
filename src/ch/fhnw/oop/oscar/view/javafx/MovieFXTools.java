@@ -1,7 +1,6 @@
 package ch.fhnw.oop.oscar.view.javafx;
 
-import ch.fhnw.oop.oscar.model.Movie;
-import ch.fhnw.oop.oscar.view.OscarView;
+import ch.fhnw.oop.oscar.IOscarPresenter;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,7 +16,7 @@ import java.util.ResourceBundle;
  */
 public class MovieFXTools extends ToolBar {
     private final ResourceBundle STRINGS =  ResourceBundle.getBundle("view.javafx.Strings");
-    OscarView parent;
+    IOscarPresenter presenter;
 
     private Button save;
 
@@ -30,8 +29,8 @@ public class MovieFXTools extends ToolBar {
     private TextField search;
 
 
-    public MovieFXTools(OscarView parent) {
-        this.parent = parent;
+    public MovieFXTools(IOscarPresenter presenter) {
+        this.presenter = presenter;
 
         initializeControls();
         layoutControls();

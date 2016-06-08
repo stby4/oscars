@@ -1,16 +1,18 @@
 package ch.fhnw.oop.oscar.view.javafx;
 
+import ch.fhnw.oop.oscar.IOscarPresenter;
 import ch.fhnw.oop.oscar.model.Movie;
-import ch.fhnw.oop.oscar.view.OscarView;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 /**
@@ -19,7 +21,7 @@ import java.util.ResourceBundle;
  */
 public class MovieFXDetails extends VBox {
     private final ResourceBundle STRINGS =  ResourceBundle.getBundle("view.javafx.Strings");
-    OscarView parent;
+    IOscarPresenter presenter;
     Movie movie;
 
     private Spinner<Integer> year;
@@ -28,41 +30,42 @@ public class MovieFXDetails extends VBox {
     private TextField actors;
     private TextField titleEn;
     private TextField genre;
-    private Spinner<IntegerProperty> yearProduction;
+    private Spinner<Integer> yearProduction;
     private TextField countries;
-    private Spinner<IntegerProperty> duration;
-    private ComboBox<IntegerProperty> fsk;
+    private Spinner<Integer> duration;
+    private ComboBox<Integer> fsk;
     private DatePicker startDate;
-    private Spinner<IntegerProperty> numberOscars;
+    private Spinner<Integer> numberOscars;
 
-    public MovieFXDetails(OscarView parent) {
-        this.parent = parent;
+    public MovieFXDetails(IOscarPresenter presenter) {
+        this.presenter = presenter;
         initializeControls();
         layoutControls();
         addEventHandlers();
     }
 
     public void setMovie(Movie movie) {
-        if(null != this.movie) {
-            this.movie.yearAwardProperty().unbind();
-            this.movie.titleProperty().unbind();
-            this.movie.directorProperty().unbind();
-            this.movie.actorsProperty().unbind();
-        }
         this.movie = movie;
 
-        year.getValueFactory().setValue(this.movie.getYearAward());
-        title.setText(this.movie.getTitle());
-        actors.setText(this.movie.getActors());
-        director.setText(this.movie.getDirector());
+        year.getValueFactory().setValue(movie.getYearAward());
+        title.setText(movie.getTitle());
+        director.setText(movie.getDirector());
+        actors.setText(movie.getActors());
+        titleEn.setText(movie.getTitleEn());
+        genre.setText(movie.getGenre());
+        yearProduction.getValueFactory().setValue(this.movie.getYearProduction());
+        countries.setText(movie.getCountries());
+        duration.getValueFactory().setValue(movie.getDuration());
+        // fsk
+        startDate.setValue(movie.getStartDate());
+        numberOscars.getValueFactory().setValue(movie.getNumberOscars());
     }
 
     private void initializeControls() {
         // Year
         year = new Spinner<>();
-        // TODO make it future proof
-        year.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
-        year.setEditable(true);
+        year.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Calendar.getInstance().get(Calendar.YEAR)));
+
         title = new TextField();
         director = new TextField();
         actors = new TextField();
@@ -71,11 +74,17 @@ public class MovieFXDetails extends VBox {
 
         // Year production
         yearProduction = new Spinner<>();
+        yearProduction.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Calendar.getInstance().get(Calendar.YEAR)));
+
         countries = new TextField();
+
         duration = new Spinner<>();
+        duration.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
+
         fsk = new ComboBox<>();
         startDate = new DatePicker();
         numberOscars = new Spinner<>();
+        numberOscars.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
     }
 
     private void layoutControls() {
@@ -138,6 +147,18 @@ public class MovieFXDetails extends VBox {
 
     private void addEventHandlers() {
 
+        year.valueProperty().addListener((v, o, n) -> presenter.onYearAwardChanged(movie, n));
+        title.textProperty().addListener((v, o, n) -> presenter.onTitleChanged(movie, n));
+        director.textProperty().addListener((v, o, n) -> presenter.onDirectorChanged(movie, n));
+        actors.textProperty().addListener((v, o, n) -> presenter.onActorsChanged(movie, n));
+        titleEn.textProperty().addListener((v, o, n) -> presenter.onTitleEnChanged(movie, n));
+        genre.textProperty().addListener((v, o, n) -> presenter.onGenreChanged(movie, n));
+        yearProduction.valueProperty().addListener((v, o, n) -> presenter.onYearProductionChanged(movie, n));
+        countries.textProperty().addListener((v, o, n) -> presenter.onCountriesChanged(movie, n));
+        duration.valueProperty().addListener((v, o, n) -> presenter.onDurationChanged(movie, n));
+        fsk.valueProperty().addListener((v, o, n) -> presenter.onFskChanged(movie, n));
+        startDate.valueProperty().addListener((v, o, n) -> presenter.onStartDateChanged(movie, n));
+        numberOscars.valueProperty().addListener((v, o, n) -> presenter.onNumberOscatsChanged(movie, n));
     }
 
     private void addValueChangeListeners() {

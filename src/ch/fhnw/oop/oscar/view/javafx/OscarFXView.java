@@ -2,13 +2,9 @@ package ch.fhnw.oop.oscar.view.javafx;
 
 import ch.fhnw.oop.oscar.OscarPresenter;
 import ch.fhnw.oop.oscar.model.Movie;
-import ch.fhnw.oop.oscar.view.OscarView;
+import ch.fhnw.oop.oscar.view.IOscarView;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Control;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -16,7 +12,7 @@ import javafx.scene.layout.VBox;
  * OscarFXView
  * Created by Hinrich on 31.05.2016.
  */
-class OscarFXView extends VBox implements OscarView {
+class OscarFXView extends VBox implements IOscarView {
     private final OscarPresenter presenter;
     private MovieFXSelector<Movie> movieSelector;
     private MovieFXTools toolBar;
@@ -47,9 +43,9 @@ class OscarFXView extends VBox implements OscarView {
     }
 
     private void initializeControls() {
-        toolBar = new MovieFXTools(this);
-        movieSelector = new MovieFXSelector<>(this);
-        movieDetails = new MovieFXDetails(this);
+        toolBar = new MovieFXTools(presenter);
+        movieSelector = new MovieFXSelector<>(presenter);
+        movieDetails = new MovieFXDetails(presenter);
     }
 
     private void layoutControls() {

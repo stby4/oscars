@@ -1,8 +1,7 @@
 package ch.fhnw.oop.oscar.view.javafx;
 
+import ch.fhnw.oop.oscar.IOscarPresenter;
 import ch.fhnw.oop.oscar.model.Movie;
-import ch.fhnw.oop.oscar.model.MovieEdited;
-import ch.fhnw.oop.oscar.view.OscarView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableCell;
@@ -20,8 +19,8 @@ import java.util.ResourceBundle;
  * Created by Hinrich on 31.05.2016.
  */
 class MovieFXSelector<T extends Movie> extends TableView {
-    private final ResourceBundle STRINGS =  ResourceBundle.getBundle("view.javafx.Strings");
-    private OscarView parent;
+    private final ResourceBundle STRINGS = ResourceBundle.getBundle("view.javafx.Strings");
+    private IOscarPresenter presenter;
 
     private TableColumn editedCol;
     private TableColumn<T, Integer> yearAwardCol;
@@ -30,8 +29,8 @@ class MovieFXSelector<T extends Movie> extends TableView {
     TableColumn<T, String> actorsCol;
 
     @SuppressWarnings("unchecked")
-    MovieFXSelector(OscarView parent) {
-        this.parent = parent;
+    MovieFXSelector(IOscarPresenter presenter) {
+        this.presenter = presenter;
 
         initializeControls();
         layoutControls();
@@ -43,17 +42,17 @@ class MovieFXSelector<T extends Movie> extends TableView {
 
     private void initializeControls() {
 
-        editedCol = new TableColumn();
-        editedCol.setCellValueFactory(new PropertyValueFactory("edited"));
+        editedCol = new TableColumn<>();
+        editedCol.setCellValueFactory(new PropertyValueFactory<T, Boolean>("edited"));
         //editedCol.setPrefWidth(16);
-        editedCol.setCellFactory(new Callback<TableColumn<T, MovieEdited>, TableCell<T, MovieEdited>>() {
+        editedCol.setCellFactory(new Callback<TableColumn<T, Boolean>, TableCell<T, Boolean>>() {
             @Override
-            public TableCell<T, MovieEdited> call(TableColumn<T, MovieEdited> param) {
-                TableCell<T, MovieEdited> cell = new TableCell<T, MovieEdited>() {
+            public TableCell<T, Boolean> call(TableColumn<T, Boolean> param) {
+                TableCell<T, Boolean> cell = new TableCell<T, Boolean>() {
                     @Override
-                    protected void updateItem(MovieEdited item, boolean empty) {
+                    protected void updateItem(Boolean item, boolean empty) {
                         if (null != item) {
-                            if (item.isEdited()) {
+                            if (item) {
                                 ImageView edited = new ImageView(new Image("view/javafx/marks/Mark_Blue.png", true));
                                 edited.setFitHeight(16);
                                 edited.setFitWidth(16);
@@ -71,12 +70,12 @@ class MovieFXSelector<T extends Movie> extends TableView {
             }
         });
 
-
         yearAwardCol = new TableColumn<>(STRINGS.getString("Year"));
         yearAwardCol.setCellValueFactory(new PropertyValueFactory<T, Integer>("yearAward"));
 
         titleCol = new TableColumn<>(STRINGS.getString("Title"));
         titleCol.setCellValueFactory(new PropertyValueFactory<T, String>("title"));
+        yearAwardCol.setEditable(true);
 
         directorCol = new TableColumn<>(STRINGS.getString("Director"));
         directorCol.setCellValueFactory(new PropertyValueFactory<T, String>("director"));
@@ -88,7 +87,6 @@ class MovieFXSelector<T extends Movie> extends TableView {
     @SuppressWarnings("unchecked")
     private void layoutControls() {
         getColumns().setAll(editedCol, yearAwardCol, titleCol, directorCol, actorsCol);
-
     }
 
     private void addEventHandlers() {
@@ -99,14 +97,13 @@ class MovieFXSelector<T extends Movie> extends TableView {
         getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if(null != newValue && newValue instanceof Movie) {
-                    parent.onMovieSelected((Movie) newValue);
+                if (null != newValue && newValue instanceof Movie) {
+                    presenter.onMovieSelected((Movie) newValue);
                 }
             }
         });
     }
 
     private void addBindings() {
-
     }
 }

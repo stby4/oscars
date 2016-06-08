@@ -1,12 +1,10 @@
 package ch.fhnw.oop.oscar.view.javafx;
 
-import ch.fhnw.oop.oscar.model.Movie;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
