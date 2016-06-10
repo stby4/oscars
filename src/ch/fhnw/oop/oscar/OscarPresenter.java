@@ -1,13 +1,17 @@
 package ch.fhnw.oop.oscar;
 
+import ch.fhnw.oop.oscar.model.LevenshteinDistance;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.model.OscarModel;
 import ch.fhnw.oop.oscar.model.filebackend.FileBackendModel;
 import ch.fhnw.oop.oscar.view.IOscarView;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.StringProperty;
+import javafx.collections.transformation.FilteredList;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
 
 /**
  * Presenter
@@ -20,11 +24,28 @@ public class OscarPresenter implements IOscarPresenter {
     public OscarPresenter(IOscarView view) {
         this.view = view;
         model = new FileBackendModel();
+
     }
 
     @Override
     public void fillView() {
         view.setMovies(model.getMovies());
+    }
+
+    public void filterMovies(FilteredList<Movie> moviesFiltered, String query) {
+        if (null != moviesFiltered) {
+            moviesFiltered.setPredicate(movie -> {
+                if (null == query || query.isEmpty()) {
+                    return true;
+                }
+
+                if(0.8 < LevenshteinDistance.getSimilarity(query, movie.getTitle())) {
+                    return true;
+                }
+
+                return false;
+            });
+        }
     }
 
     @Override

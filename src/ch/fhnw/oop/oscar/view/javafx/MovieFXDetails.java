@@ -2,6 +2,7 @@ package ch.fhnw.oop.oscar.view.javafx;
 
 import ch.fhnw.oop.oscar.IOscarPresenter;
 import ch.fhnw.oop.oscar.model.Movie;
+import ch.fhnw.oop.oscar.view.IOscarView;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,8 +22,9 @@ import java.util.ResourceBundle;
  */
 public class MovieFXDetails extends VBox {
     private final ResourceBundle STRINGS =  ResourceBundle.getBundle("view.javafx.Strings");
-    IOscarPresenter presenter;
-    Movie movie;
+    private final IOscarPresenter presenter;
+    private final IOscarView parent;
+    private Movie movie;
 
     private Spinner<Integer> year;
     private TextField title;
@@ -37,8 +39,10 @@ public class MovieFXDetails extends VBox {
     private DatePicker startDate;
     private Spinner<Integer> numberOscars;
 
-    public MovieFXDetails(IOscarPresenter presenter) {
+    public MovieFXDetails(IOscarPresenter presenter, IOscarView parent) {
         this.presenter = presenter;
+        this.parent = parent;
+
         initializeControls();
         layoutControls();
         addEventHandlers();

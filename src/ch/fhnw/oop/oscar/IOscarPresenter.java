@@ -3,6 +3,7 @@ package ch.fhnw.oop.oscar;
 import ch.fhnw.oop.oscar.model.Movie;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.transformation.FilteredList;
 
 import java.time.LocalDate;
 
@@ -15,6 +16,12 @@ public interface IOscarPresenter {
      * fills the current view with the data from the model
      */
     public void fillView();
+
+    /**
+     * filters movie list
+     * @param query the seartch term
+     */
+    void filterMovies(FilteredList<Movie> moviesFiltered, String query);
 
     /**
      * set movie for editing

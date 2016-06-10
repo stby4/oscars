@@ -4,6 +4,8 @@ import ch.fhnw.oop.oscar.OscarPresenter;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.view.IOscarView;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -17,6 +19,7 @@ class OscarFXView extends VBox implements IOscarView {
     private MovieFXSelector<Movie> movieSelector;
     private MovieFXTools toolBar;
     private MovieFXDetails movieDetails;
+    private FilteredList<Movie> moviesFiltered;
 
     OscarFXView() {
         presenter = new OscarPresenter(this);
@@ -33,8 +36,14 @@ class OscarFXView extends VBox implements IOscarView {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void setMovies(ObservableList<Movie> movies) {
-        movieSelector.setItems(movies);
+    public void setMovies(ObservableList<Movie> moviesObservable) {
+        moviesFiltered = new FilteredList<>(moviesObservable, p -> true);
+        toolBar.setMovies(moviesFiltered);
+
+        SortedList<Movie> moviesSorted = new SortedList<>(moviesFiltered);
+        moviesSorted.comparatorProperty().bind(movieSelector.comparatorProperty());
+
+        movieSelector.setItems(moviesSorted);
     }
 
     @Override
@@ -43,9 +52,9 @@ class OscarFXView extends VBox implements IOscarView {
     }
 
     private void initializeControls() {
-        toolBar = new MovieFXTools(presenter);
-        movieSelector = new MovieFXSelector<>(presenter);
-        movieDetails = new MovieFXDetails(presenter);
+        toolBar = new MovieFXTools(presenter, this);
+        movieSelector = new MovieFXSelector<>(presenter, this);
+        movieDetails = new MovieFXDetails(presenter, this);
     }
 
     private void layoutControls() {

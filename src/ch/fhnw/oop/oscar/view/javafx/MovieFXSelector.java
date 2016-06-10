@@ -2,6 +2,7 @@ package ch.fhnw.oop.oscar.view.javafx;
 
 import ch.fhnw.oop.oscar.IOscarPresenter;
 import ch.fhnw.oop.oscar.model.Movie;
+import ch.fhnw.oop.oscar.view.IOscarView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableCell;
@@ -20,7 +21,8 @@ import java.util.ResourceBundle;
  */
 class MovieFXSelector<T extends Movie> extends TableView {
     private final ResourceBundle STRINGS = ResourceBundle.getBundle("view.javafx.Strings");
-    private IOscarPresenter presenter;
+    private final IOscarPresenter presenter;
+    private final IOscarView parent;
 
     private TableColumn editedCol;
     private TableColumn<T, Integer> yearAwardCol;
@@ -29,8 +31,9 @@ class MovieFXSelector<T extends Movie> extends TableView {
     TableColumn<T, String> actorsCol;
 
     @SuppressWarnings("unchecked")
-    MovieFXSelector(IOscarPresenter presenter) {
+    MovieFXSelector(IOscarPresenter presenter, IOscarView parent) {
         this.presenter = presenter;
+        this.parent = parent;
 
         initializeControls();
         layoutControls();
@@ -63,6 +66,8 @@ class MovieFXSelector<T extends Movie> extends TableView {
                                 unedited.setFitWidth(16);
                                 setGraphic(unedited);
                             }
+                        } else {
+                            setGraphic(null);
                         }
                     }
                 };
@@ -71,17 +76,17 @@ class MovieFXSelector<T extends Movie> extends TableView {
         });
 
         yearAwardCol = new TableColumn<>(STRINGS.getString("Year"));
-        yearAwardCol.setCellValueFactory(new PropertyValueFactory<T, Integer>("yearAward"));
+        yearAwardCol.setCellValueFactory(new PropertyValueFactory<>("yearAward"));
 
         titleCol = new TableColumn<>(STRINGS.getString("Title"));
-        titleCol.setCellValueFactory(new PropertyValueFactory<T, String>("title"));
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         yearAwardCol.setEditable(true);
 
         directorCol = new TableColumn<>(STRINGS.getString("Director"));
-        directorCol.setCellValueFactory(new PropertyValueFactory<T, String>("director"));
+        directorCol.setCellValueFactory(new PropertyValueFactory<>("director"));
 
         actorsCol = new TableColumn<>(STRINGS.getString("Actors"));
-        actorsCol.setCellValueFactory(new PropertyValueFactory<T, String>("actors"));
+        actorsCol.setCellValueFactory(new PropertyValueFactory<>("actors"));
     }
 
     @SuppressWarnings("unchecked")
@@ -94,12 +99,9 @@ class MovieFXSelector<T extends Movie> extends TableView {
 
     @SuppressWarnings("unchecked")
     private void addValueChangeListeners() {
-        getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if (null != newValue && newValue instanceof Movie) {
-                    presenter.onMovieSelected((Movie) newValue);
-                }
+        getSelectionModel().selectedItemProperty().addListener((v, o, n) -> {
+            if (null != n && n instanceof Movie) {
+                presenter.onMovieSelected((T) n);
             }
         });
     }

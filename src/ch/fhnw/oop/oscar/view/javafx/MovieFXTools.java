@@ -1,6 +1,9 @@
 package ch.fhnw.oop.oscar.view.javafx;
 
 import ch.fhnw.oop.oscar.IOscarPresenter;
+import ch.fhnw.oop.oscar.model.Movie;
+import ch.fhnw.oop.oscar.view.IOscarView;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,7 +19,8 @@ import java.util.ResourceBundle;
  */
 public class MovieFXTools extends ToolBar {
     private final ResourceBundle STRINGS =  ResourceBundle.getBundle("view.javafx.Strings");
-    IOscarPresenter presenter;
+    private final IOscarPresenter presenter;
+    private final IOscarView parent;
 
     private Button save;
 
@@ -28,13 +32,20 @@ public class MovieFXTools extends ToolBar {
 
     private TextField search;
 
+    private FilteredList<Movie> moviesFiltered;
 
-    public MovieFXTools(IOscarPresenter presenter) {
+
+    public MovieFXTools(IOscarPresenter presenter, IOscarView parent) {
         this.presenter = presenter;
+        this.parent = parent;
 
         initializeControls();
         layoutControls();
         addEventHandlers();
+    }
+
+    public void setMovies(FilteredList<Movie> moviesFiltered) {
+        this.moviesFiltered = moviesFiltered;
     }
 
     private void initializeControls() {
@@ -86,6 +97,8 @@ public class MovieFXTools extends ToolBar {
     }
 
     private void addEventHandlers() {
-
+        search.textProperty().addListener((v, o, query) -> {
+            presenter.filterMovies(moviesFiltered, query);
+        });
     }
 }
