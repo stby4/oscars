@@ -1,6 +1,5 @@
 package ch.fhnw.oop.oscar;
 
-import ch.fhnw.oop.oscar.model.LevenshteinDistance;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.model.OscarModel;
 import ch.fhnw.oop.oscar.model.filebackend.FileBackendModel;
@@ -8,10 +7,6 @@ import ch.fhnw.oop.oscar.view.IOscarView;
 import javafx.collections.transformation.FilteredList;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
 
 /**
  * Presenter
@@ -39,7 +34,15 @@ public class OscarPresenter implements IOscarPresenter {
                     return true;
                 }
 
-                if(0.8 < LevenshteinDistance.getSimilarity(query, movie.getTitle())) {
+                if(movie.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                    return true;
+                }
+
+                if(movie.getActors().toLowerCase().contains(query.toLowerCase())) {
+                    return true;
+                }
+
+                if(movie.getDirector().toLowerCase().contains(query.toLowerCase())) {
                     return true;
                 }
 
