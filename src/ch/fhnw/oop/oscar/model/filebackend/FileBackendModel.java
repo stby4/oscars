@@ -1,7 +1,7 @@
 package ch.fhnw.oop.oscar.model.filebackend;
 
 import ch.fhnw.oop.oscar.model.Movie;
-import ch.fhnw.oop.oscar.model.OscarModel;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -16,7 +16,7 @@ import java.util.*;
  * FileBackendModel
  * Created by Hinrich on 31.05.2016.
  */
-public class FileBackendModel implements OscarModel {
+public class FileBackendModel {
     private ObservableList<Movie> movies = FXCollections.observableArrayList();
 
     public FileBackendModel() {

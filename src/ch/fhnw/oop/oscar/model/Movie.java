@@ -11,7 +11,7 @@ import java.util.List;
  * Movie
  * Created by Hinrich on 31.05.2016.
  */
-public class Movie {
+public class Movie implements IModel {
     private IntegerProperty id = new SimpleIntegerProperty();
     private StringProperty title = new SimpleStringProperty();
     private StringProperty titleEn = new SimpleStringProperty();
@@ -99,7 +99,7 @@ public class Movie {
         return titleEn;
     }
 
-    private void setTitleEn(String titleEn) {
+    public void setTitleEn(String titleEn) {
         this.titleEn.set(titleEn);
     }
 
@@ -111,7 +111,7 @@ public class Movie {
         return yearAward;
     }
 
-    private void setYearAward(int yearAward) {
+    public void setYearAward(int yearAward) {
         this.yearAward.set(yearAward);
     }
 
@@ -123,7 +123,7 @@ public class Movie {
         return yearProduction;
     }
 
-    private void setYearProduction(int yearProduction) {
+    public void setYearProduction(int yearProduction) {
         this.yearProduction.set(yearProduction);
     }
 
@@ -135,7 +135,7 @@ public class Movie {
         return director;
     }
 
-    private void setDirector(String director) {
+    public void setDirector(String director) {
         this.director.set(director);
     }
 
@@ -147,7 +147,7 @@ public class Movie {
         return actors;
     }
 
-    private void setActors(String actors) {
+    public void setActors(String actors) {
         this.actors.set(actors);
     }
 
@@ -159,7 +159,7 @@ public class Movie {
         return countries;
     }
 
-    private void setCountries(String countries) {
+    public void setCountries(String countries) {
         this.countries.set(countries);
     }
 
@@ -171,7 +171,7 @@ public class Movie {
         return duration;
     }
 
-    private void setDuration(int duration) {
+    public void setDuration(int duration) {
         this.duration.set(duration);
     }
 
@@ -183,7 +183,7 @@ public class Movie {
         return fsk;
     }
 
-    private void setFsk(int fsk) {
+    public void setFsk(int fsk) {
         this.fsk.set(fsk);
     }
 
@@ -195,7 +195,7 @@ public class Movie {
         return genre;
     }
 
-    private void setGenre(String genre) {
+    public void setGenre(String genre) {
         this.genre.set(genre);
     }
 
@@ -219,7 +219,7 @@ public class Movie {
         return numberOscars;
     }
 
-    private void setNumberOscars(int numberOscars) {
+    public void setNumberOscars(int numberOscars) {
         this.numberOscars.set(numberOscars);
     }
 
@@ -231,7 +231,7 @@ public class Movie {
         return edited;
     }
 
-    public void setEdited(Boolean edited) {
+    private void setEdited(Boolean edited) {
         this.edited.set(edited);
     }
 }

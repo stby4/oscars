@@ -8,7 +8,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -20,11 +23,19 @@ import java.util.ResourceBundle;
  * MovieFXDetails
  * Created by Hinrich on 07.06.2016.
  */
-public class MovieFXDetails extends VBox {
-    private final ResourceBundle STRINGS =  ResourceBundle.getBundle("view.javafx.Strings");
+class MovieFXDetails extends VBox {
+    private final ResourceBundle STRINGS = ResourceBundle.getBundle("view.javafx.Strings");
     private final IOscarPresenter presenter;
     private final IOscarView parent;
     private Movie movie;
+
+    private Label yearLabel;
+    private Label titleLabel;
+    private Label directorLabel;
+    private Label actorsLabel;
+    private HBox numberOscarsHBox;
+    private ImageView posterImage;
+    private HBox countriesHBox;
 
     private Spinner<Integer> year;
     private TextField title;
@@ -39,7 +50,7 @@ public class MovieFXDetails extends VBox {
     private DatePicker startDate;
     private Spinner<Integer> numberOscars;
 
-    public MovieFXDetails(IOscarPresenter presenter, IOscarView parent) {
+    MovieFXDetails(IOscarPresenter presenter, IOscarView parent) {
         this.presenter = presenter;
         this.parent = parent;
 
@@ -50,6 +61,36 @@ public class MovieFXDetails extends VBox {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+
+        yearLabel.textProperty().unbind();
+        yearLabel.textProperty().bind(movie.yearAwardProperty().asString());
+        titleLabel.textProperty().unbind();
+        titleLabel.textProperty().bind(movie.titleProperty());
+        actorsLabel.textProperty().unbind();
+        actorsLabel.textProperty().bind(movie.actorsProperty());
+        directorLabel.textProperty().unbind();
+        directorLabel.textProperty().bind(movie.directorProperty());
+
+        movie.numberOscarsProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                //System.out.println("HERE I AM: "+ oldValue + ", " + newValue);
+                if (null != newValue) {
+                    // have to use children count of HBOX because... reasons (Java)
+                    int difference = newValue.intValue() - numberOscarsHBox.getChildren().size();
+                    if (0 < difference) {
+                        for (int i = 0; i < difference; i++) {
+                            numberOscarsHBox.getChildren().add(getOscarImageView());
+                        }
+                    } else if (0 > difference) {
+                        for (int i = 0; i < -difference; i++) {
+                            numberOscarsHBox.getChildren().remove(numberOscarsHBox.getChildren().size() - 1);
+                        }
+                    }
+                }
+            }
+        });
+
 
         year.getValueFactory().setValue(movie.getYearAward());
         title.setText(movie.getTitle());
@@ -65,7 +106,24 @@ public class MovieFXDetails extends VBox {
         numberOscars.getValueFactory().setValue(movie.getNumberOscars());
     }
 
+    private ImageView getOscarImageView() {
+        ImageView oscar = new ImageView(new Image("view/javafx/Oscar-logo.png"));
+        oscar.setFitHeight(40);
+        oscar.setFitWidth(16);
+        return oscar;
+    }
+
     private void initializeControls() {
+        // poster area
+        yearLabel = new Label();
+        countriesHBox = new HBox();
+        titleLabel = new Label();
+        directorLabel = new Label();
+        actorsLabel = new Label();
+        numberOscarsHBox = new HBox();
+        posterImage = new ImageView();
+
+        // edit area
         // Year
         year = new Spinner<>();
         year.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Calendar.getInstance().get(Calendar.YEAR)));
@@ -92,6 +150,25 @@ public class MovieFXDetails extends VBox {
     }
 
     private void layoutControls() {
+        // poster area
+        HBox top = new HBox();
+        top.getChildren().add(0, yearLabel);
+        top.getChildren().add(1, countriesHBox);
+
+        VBox left = new VBox();
+        left.getChildren().add(0, top);
+        left.getChildren().add(1, titleLabel);
+        left.getChildren().add(2, actorsLabel);
+        left.getChildren().add(3, numberOscarsHBox);
+
+        HBox poster = new HBox();
+        poster.setPadding(new Insets(20));
+        poster.setMaxWidth(Double.MAX_VALUE);
+
+        poster.getChildren().add(0, left);
+        poster.getChildren().add(1, posterImage);
+
+        // edit area
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(20));
         grid.setHgap(10);
@@ -146,23 +223,23 @@ public class MovieFXDetails extends VBox {
         grid.add(new Text(STRINGS.getString("Oscars")), 0, 8);
         grid.add(numberOscars, 1, 8, 3, 1);
 
-        getChildren().add(grid);
+        getChildren().add(new VBox(poster, grid));
     }
 
     private void addEventHandlers() {
 
-        year.valueProperty().addListener((v, o, n) -> presenter.onYearAwardChanged(movie, n));
-        title.textProperty().addListener((v, o, n) -> presenter.onTitleChanged(movie, n));
-        director.textProperty().addListener((v, o, n) -> presenter.onDirectorChanged(movie, n));
-        actors.textProperty().addListener((v, o, n) -> presenter.onActorsChanged(movie, n));
-        titleEn.textProperty().addListener((v, o, n) -> presenter.onTitleEnChanged(movie, n));
-        genre.textProperty().addListener((v, o, n) -> presenter.onGenreChanged(movie, n));
-        yearProduction.valueProperty().addListener((v, o, n) -> presenter.onYearProductionChanged(movie, n));
-        countries.textProperty().addListener((v, o, n) -> presenter.onCountriesChanged(movie, n));
-        duration.valueProperty().addListener((v, o, n) -> presenter.onDurationChanged(movie, n));
-        fsk.valueProperty().addListener((v, o, n) -> presenter.onFskChanged(movie, n));
-        startDate.valueProperty().addListener((v, o, n) -> presenter.onStartDateChanged(movie, n));
-        numberOscars.valueProperty().addListener((v, o, n) -> presenter.onNumberOscatsChanged(movie, n));
+        year.valueProperty().addListener((v, o, n) -> presenter.onYearAwardChanged(movie, o, n));
+        title.textProperty().addListener((v, o, n) -> presenter.onTitleChanged(movie, o, n));
+        director.textProperty().addListener((v, o, n) -> presenter.onDirectorChanged(movie, o, n));
+        actors.textProperty().addListener((v, o, n) -> presenter.onActorsChanged(movie, o, n));
+        titleEn.textProperty().addListener((v, o, n) -> presenter.onTitleEnChanged(movie, o, n));
+        genre.textProperty().addListener((v, o, n) -> presenter.onGenreChanged(movie, o, n));
+        yearProduction.valueProperty().addListener((v, o, n) -> presenter.onYearProductionChanged(movie, o, n));
+        countries.textProperty().addListener((v, o, n) -> presenter.onCountriesChanged(movie, o, n));
+        duration.valueProperty().addListener((v, o, n) -> presenter.onDurationChanged(movie, o, n));
+        fsk.valueProperty().addListener((v, o, n) -> presenter.onFskChanged(movie, o, n));
+        startDate.valueProperty().addListener((v, o, n) -> presenter.onStartDateChanged(movie, o, n));
+        numberOscars.valueProperty().addListener((v, o, n) -> presenter.onNumberOscarsChanged(movie, o, n));
     }
 
     private void addValueChangeListeners() {

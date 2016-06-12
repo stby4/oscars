@@ -15,7 +15,7 @@ public interface IOscarPresenter {
     /**
      * fills the current view with the data from the model
      */
-    public void fillView();
+    void fillView();
 
     /**
      * filters movie list
@@ -25,19 +25,19 @@ public interface IOscarPresenter {
 
     /**
      * set movie for editing
-     * @param movie
+     * @param movie the movie
      */
     void onMovieSelected(Movie movie);
-    void onTitleChanged(Movie movie, String title);
-    void onYearAwardChanged(Movie movie, Integer yearAward);
-    void onDirectorChanged(Movie movie, String director);
-    void onActorsChanged(Movie movie, String actors);
-    void onTitleEnChanged(Movie movie, String titleEn);
-    void onYearProductionChanged(Movie movie, Integer yearProduction);
-    void onCountriesChanged(Movie movie, String countries);
-    void onDurationChanged(Movie movie, Integer duration);
-    void onFskChanged(Movie movie, Integer fsk);
-    void onGenreChanged(Movie movie, String genre);
-    void onStartDateChanged(Movie movie, LocalDate startDate);
-    void onNumberOscatsChanged(Movie movie, Integer oscars);
+    void onTitleChanged(Movie movie, String oldTitle, String newTitle);
+    void onYearAwardChanged(Movie movie, Integer oldYearAward, Integer newYearAward);
+    void onDirectorChanged(Movie movie, String oldDirector, String newDirector);
+    void onActorsChanged(Movie movie, String oldActors, String newActors);
+    void onTitleEnChanged(Movie movie, String oldTitleEn, String newTitleEn);
+    void onYearProductionChanged(Movie movie, Integer oldYearProduction, Integer newYearProduction);
+    void onCountriesChanged(Movie movie, String oldCountries, String newCountries);
+    void onDurationChanged(Movie movie, Integer oldDuration, Integer newDuration);
+    void onFskChanged(Movie movie, Integer oldFsk, Integer newFsk);
+    void onGenreChanged(Movie movie, String oldGenre, String newGenre);
+    void onStartDateChanged(Movie movie, LocalDate oldStartDate, LocalDate newStartDate);
+    void onNumberOscarsChanged(Movie movie, Integer oldOscars, Integer newOscars);
 }
