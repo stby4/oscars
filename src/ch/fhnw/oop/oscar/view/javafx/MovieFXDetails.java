@@ -14,6 +14,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -101,7 +102,8 @@ class MovieFXDetails extends VBox {
         yearProduction.getValueFactory().setValue(this.movie.getYearProduction());
         countries.setText(movie.getCountries());
         duration.getValueFactory().setValue(movie.getDuration());
-        // fsk
+        fsk.setValue(movie.getFsk());
+        fsk.setButtonCell((fsk.getCellFactory()).call(null));
         startDate.setValue(movie.getStartDate());
         numberOscars.getValueFactory().setValue(movie.getNumberOscars());
     }
@@ -144,6 +146,26 @@ class MovieFXDetails extends VBox {
         duration.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
 
         fsk = new ComboBox<>();
+        fsk.getItems().addAll(0, 6, 12, 16, 18);
+        fsk.setCellFactory(new Callback<ListView<Integer>, ListCell<Integer>>() {
+            @Override
+            public ListCell<Integer> call(ListView<Integer> param) {
+                return new ListCell<Integer>() {
+                    @Override
+                    protected void updateItem(Integer item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (null == item || empty) {
+                            setGraphic(null);
+                        } else {
+                            ImageView fskImage = new ImageView(new Image("view/javafx/fsk_labels/FSK_ab_" + item + "_logo_Dec_2008.svg.png", true));
+                            setGraphic(fskImage);
+                        }
+                    }
+                };
+            }
+        });
+
         startDate = new DatePicker();
         numberOscars = new Spinner<>();
         numberOscars.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
@@ -243,7 +265,6 @@ class MovieFXDetails extends VBox {
     }
 
     private void addValueChangeListeners() {
-
     }
 
     private void addBindings() {
