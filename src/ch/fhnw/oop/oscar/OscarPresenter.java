@@ -3,6 +3,7 @@ package ch.fhnw.oop.oscar;
 import ch.fhnw.oop.oscar.command.ICommand;
 import ch.fhnw.oop.oscar.controller.OscarController;
 import ch.fhnw.oop.oscar.model.Movie;
+import ch.fhnw.oop.oscar.model.StringDistance;
 import ch.fhnw.oop.oscar.model.filebackend.FileBackendModel;
 import ch.fhnw.oop.oscar.view.IOscarView;
 import javafx.collections.ObservableList;
@@ -22,8 +23,8 @@ public class OscarPresenter implements IOscarPresenter {
     private final FileBackendModel model;
     private final OscarController controller;
     private final ObservableList<Movie> movies;
-    private final List<ICommand> executeList;
-    private final List<ICommand> undoList;
+    private final ObservableList<ICommand> executeList;
+    private final ObservableList<ICommand> undoList;
 
     public OscarPresenter(IOscarView view) {
         this.view = view;
@@ -34,11 +35,11 @@ public class OscarPresenter implements IOscarPresenter {
         undoList = controller.getUndoList();
     }
 
-    public List<ICommand> getExecuteList() {
+    public ObservableList<ICommand> getExecuteList() {
         return executeList;
     }
 
-    public List<ICommand> getUndoList() {
+    public ObservableList<ICommand> getUndoList() {
         return undoList;
     }
 
@@ -50,6 +51,17 @@ public class OscarPresenter implements IOscarPresenter {
     public void filterMovies(FilteredList<Movie> moviesFiltered, String query) {
         if (null != moviesFiltered) {
             moviesFiltered.setPredicate(movie -> {
+                if (null != query && !query.isEmpty()) {
+                    double t = StringDistance.similarity(movie.getTitle(), query);
+                    double a = StringDistance.similarity(movie.getActors(), query);
+                    double d = StringDistance.similarity(movie.getDirector(), query);
+
+                    if (0.5 < Math.max(t, Math.max(a, d))) {
+                        return true;
+                    }
+                }
+
+                // use simple "contains" search as backup
                 return null == query || query.isEmpty() || movie.getTitle().toLowerCase().contains(query.toLowerCase()) || movie.getActors().toLowerCase().contains(query.toLowerCase()) || movie.getDirector().toLowerCase().contains(query.toLowerCase());
             });
         }

@@ -2,30 +2,32 @@ package ch.fhnw.oop.oscar.controller;
 
 import ch.fhnw.oop.oscar.command.*;
 import ch.fhnw.oop.oscar.model.Movie;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * execute/undo controller for oscar project
  * Created by Hinrich on 12.06.2016.
  */
+@SuppressWarnings("unchecked")
 public class OscarController {
-    private final List<ICommand> executeList = new ArrayList<>();
-    private final List<ICommand> undoList = new ArrayList<>();
+    private final ObservableList<ICommand> executeList = FXCollections.observableArrayList();
+    private final ObservableList<ICommand> undoList = FXCollections.observableArrayList();
 
     public void execute(ICommand command) {
         command.execute();
         executeList.add(command);
+        undoList.clear();
     }
 
     public void execute(int number) {
         for (int i = 0; i < number; i++) {
             try {
-                ICommand command = undoList.remove(executeList.size() - 1);
-                execute(command);
+                ICommand command = undoList.remove(undoList.size() - 1);
+                command.execute();
+                executeList.add(command);
             } catch (Exception e) {
                 return;
             }
@@ -35,24 +37,26 @@ public class OscarController {
     public void undo(ICommand command) {
         command.undo();
         undoList.add(command);
+        executeList.clear();
     }
 
     public void undo(int number) {
         for (int i = 0; i < number; i++) {
             try {
                 ICommand command = executeList.remove(executeList.size() - 1);
-                undo(command);
+                command.undo();
+                undoList.add(command);
             } catch (Exception e) {
                 return;
             }
         }
     }
 
-    public List<ICommand> getExecuteList() {
+    public ObservableList<ICommand> getExecuteList() {
         return executeList;
     }
 
-    public List<ICommand> getUndoList() {
+    public ObservableList<ICommand> getUndoList() {
         return undoList;
     }
 

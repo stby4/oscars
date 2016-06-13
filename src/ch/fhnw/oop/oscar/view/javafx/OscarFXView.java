@@ -28,8 +28,8 @@ class OscarFXView extends VBox implements IOscarView {
     private MovieFXDetails movieDetails;
     private FilteredList<Movie> moviesFiltered;
     private Movie selectedMovie;
-    private final List<ICommand> executeList;
-    private final List<ICommand> undoList;
+    private final ObservableList<ICommand> executeList;
+    private final ObservableList<ICommand> undoList;
 
     OscarFXView() {
         presenter = new OscarPresenter(this);

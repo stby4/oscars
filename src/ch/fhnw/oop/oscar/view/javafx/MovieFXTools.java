@@ -4,6 +4,8 @@ import ch.fhnw.oop.oscar.IOscarPresenter;
 import ch.fhnw.oop.oscar.command.ICommand;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.view.IOscarView;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -23,8 +25,8 @@ import java.util.ResourceBundle;
 class MovieFXTools extends ToolBar {
     private final ResourceBundle STRINGS = ResourceBundle.getBundle("view.javafx.Strings");
     private final IOscarPresenter presenter;
-    private final List<ICommand> executeList;
-    private final List<ICommand> undoList;
+    private final ObservableList<ICommand> executeList;
+    private final ObservableList<ICommand> undoList;
 
     private Button save;
 
@@ -39,7 +41,7 @@ class MovieFXTools extends ToolBar {
     private FilteredList<Movie> moviesFiltered;
 
 
-    MovieFXTools(IOscarPresenter presenter, List<ICommand> executeList, List<ICommand> undoList) {
+    MovieFXTools(IOscarPresenter presenter, ObservableList<ICommand> executeList, ObservableList<ICommand> undoList) {
         this.presenter = presenter;
         this.executeList = executeList;
         this.undoList = undoList;
@@ -47,6 +49,7 @@ class MovieFXTools extends ToolBar {
         initializeControls();
         layoutControls();
         addEventHandlers();
+        addListeners();
     }
 
     void setMovies(FilteredList<Movie> moviesFiltered) {
@@ -73,13 +76,13 @@ class MovieFXTools extends ToolBar {
         undo = new Button();
         undo.setGraphic(new ImageView(imageUndo));
         undo.setTooltip(new Tooltip(STRINGS.getString("Undo")));
-        //undo.setDisable(true);
+        undo.setDisable(true);
 
         Image imageRedo = new Image("view/javafx/icons/redo.svg.png", true);
         redo = new Button();
         redo.setGraphic(new ImageView(imageRedo));
         redo.setTooltip(new Tooltip(STRINGS.getString("Redo")));
-        //redo.setDisable(true);
+        redo.setDisable(true);
 
         search = new TextField();
         search.setId("search_tf");
@@ -113,5 +116,43 @@ class MovieFXTools extends ToolBar {
 
         undo.setOnAction(event -> presenter.onUndo(1));
         redo.setOnAction(event -> presenter.onRedo(1));
+    }
+
+    private void addListeners() {
+        undoList.addListener(new ListChangeListener<ICommand>() {
+            @Override
+            public void onChanged(Change<? extends ICommand> c) {
+                while (c.next()) {
+                    if (c.wasAdded()) {
+                        if (0 < undoList.size()) {
+                            redo.setDisable(false);
+                        }
+                    }
+                    if (c.wasRemoved()) {
+                        if (1 > undoList.size()) {
+                            redo.setDisable(true);
+                        }
+                    }
+                }
+            }
+        });
+
+        executeList.addListener(new ListChangeListener<ICommand>() {
+            @Override
+            public void onChanged(Change<? extends ICommand> c) {
+                while (c.next()) {
+                    if (c.wasAdded()) {
+                        if (0 < executeList.size()) {
+                            undo.setDisable(false);
+                        }
+                    }
+                    if (c.wasRemoved()) {
+                        if (1 > executeList.size()) {
+                            undo.setDisable(true);
+                        }
+                    }
+                }
+            }
+        });
     }
 }
