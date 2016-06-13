@@ -25,4 +25,5 @@
 #details_actors {
     -fx-font-weight: bold;
     -fx-font-size: 1.4em;
+    -fx-padding: 0 0 0.2em 0;
 }

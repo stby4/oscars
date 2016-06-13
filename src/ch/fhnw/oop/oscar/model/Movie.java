@@ -5,6 +5,8 @@ import javafx.beans.property.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -27,6 +29,28 @@ public class Movie implements IModel {
     private IntegerProperty numberOscars = new SimpleIntegerProperty();
     private ObjectProperty<Boolean> edited = new SimpleObjectProperty<>();
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.uuuu");
+
+    {
+        addListeners();
+    }
+
+    public Movie(int id) {
+        setId(id);
+        setTitle("");
+        setYearAward(Calendar.getInstance().get(Calendar.YEAR));
+        setDirector("");
+        setActors("");
+        setTitleEn("");
+        setYearProduction(Calendar.getInstance().get(Calendar.YEAR));
+        setCountries("");
+        setDuration(90);
+        setFsk(0);
+        setGenre("");
+        setStartDate(LocalDate.now());
+        setNumberOscars(1);
+    }
+
     public Movie(List<String> line) {
         setId(Integer.valueOf(line.get(0)));
         setTitle(line.get(1));
@@ -39,10 +63,9 @@ public class Movie implements IModel {
         setDuration(Integer.valueOf(line.get(8)));
         setFsk(Integer.valueOf(line.get(9)));
         setGenre(line.get(10));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.uuuu");
         try {
             setStartDate(LocalDate.parse(line.get(11), formatter));
-        }catch (DateTimeParseException e) {
+        } catch (DateTimeParseException e) {
             setStartDate(null);
         }
         setNumberOscars(Integer.valueOf(line.get(12)));
@@ -233,5 +256,31 @@ public class Movie implements IModel {
 
     private void setEdited(Boolean edited) {
         this.edited.set(edited);
+    }
+
+
+    @Override
+    public String toString() {
+        List<String> s = new ArrayList<>();
+        s.add(String.valueOf(getId()));
+        s.add(getTitle());
+        s.add(String.valueOf(getYearAward()));
+        s.add(getDirector());
+        s.add(getActors());
+        s.add(getTitleEn());
+        s.add(String.valueOf(getYearProduction()));
+        s.add(getCountries());
+        s.add(String.valueOf(getDuration()));
+        s.add(String.valueOf(getFsk()));
+        s.add(getGenre());
+        if (null != getStartDate()) {
+            s.add(getStartDate().format(formatter));
+        } else {
+            s.add("-");
+        }
+        s.add(String.valueOf(getNumberOscars()));
+
+
+        return String.join(";", s);
     }
 }

@@ -12,13 +12,19 @@ import javafx.collections.ObservableList;
 public interface IOscarView {
     /**
      * inject movies
-     * @param movies
+     * @param movies movies
      */
     void setMovies(ObservableList<Movie> movies);
 
     /**
      * sets movie for editing
-     * @param movie
+     * @param movie movie
      */
     void onMovieSelected(Movie movie);
+
+    /**
+     * get currently selected movie
+     * @return Movie
+     */
+    Movie getSelectedMovie();
 }

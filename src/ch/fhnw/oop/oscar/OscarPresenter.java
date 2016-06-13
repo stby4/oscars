@@ -4,8 +4,10 @@ import ch.fhnw.oop.oscar.controller.OscarController;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.model.filebackend.FileBackendModel;
 import ch.fhnw.oop.oscar.view.IOscarView;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 /**
@@ -16,16 +18,18 @@ public class OscarPresenter implements IOscarPresenter {
     private final IOscarView view;
     private final FileBackendModel model;
     private final OscarController controller;
+    private final ObservableList<Movie> movies;
 
     public OscarPresenter(IOscarView view) {
         this.view = view;
         model = new FileBackendModel();
+        movies = model.getMovies();
         controller = new OscarController();
     }
 
     @Override
     public void fillView() {
-        view.setMovies(model.getMovies());
+        view.setMovies(movies);
     }
 
     public void filterMovies(FilteredList<Movie> moviesFiltered, String query) {
@@ -37,67 +41,89 @@ public class OscarPresenter implements IOscarPresenter {
     }
 
     @Override
+    public void onMovieAdded() {
+        controller.addMovie(movies);
+    }
+
+    @Override
+    public void onMovieDeleted() {
+        controller.deleteMovie(movies, view.getSelectedMovie());
+        if (1 > movies.size()) {
+            view.onMovieSelected(null);
+        }
+    }
+
+    @Override
+    public void onMoviesSaved() {
+        try {
+            model.writeFile();
+        } catch (IOException e) {
+// TODO
+        }
+    }
+
+    @Override
     public void onMovieSelected(Movie movie) {
         view.onMovieSelected(movie);
     }
 
     @Override
     public void onTitleChanged(Movie movie, String oldTitle, String newTitle) {
-        controller.setTitle(movie, oldTitle, newTitle);
+        if (null != movie) controller.setTitle(movie, oldTitle, newTitle);
     }
 
     @Override
     public void onYearAwardChanged(Movie movie, Integer oldYearAward, Integer newYearAward) {
-        controller.setYearAward(movie, oldYearAward, newYearAward);
+        if (null != movie) controller.setYearAward(movie, oldYearAward, newYearAward);
     }
 
     @Override
     public void onDirectorChanged(Movie movie, String oldDirector, String newDirector) {
-        controller.setDirector(movie, oldDirector, newDirector);
+        if (null != movie) controller.setDirector(movie, oldDirector, newDirector);
     }
 
     @Override
     public void onActorsChanged(Movie movie, String oldActors, String newActors) {
-        controller.setActors(movie, oldActors, newActors);
+        if (null != movie) controller.setActors(movie, oldActors, newActors);
     }
 
     @Override
     public void onTitleEnChanged(Movie movie, String oldTitleEn, String newTitleEn) {
-        controller.setTitleEn(movie, oldTitleEn, newTitleEn);
+        if (null != movie) controller.setTitleEn(movie, oldTitleEn, newTitleEn);
     }
 
     @Override
     public void onYearProductionChanged(Movie movie, Integer oldYearProduction, Integer newYearProduction) {
-        controller.setYearProduction(movie, oldYearProduction, newYearProduction);
+        if (null != movie) controller.setYearProduction(movie, oldYearProduction, newYearProduction);
     }
 
     @Override
     public void onCountriesChanged(Movie movie, String oldCountries, String newCountries) {
-        controller.setCountries(movie, oldCountries, newCountries);
+        if (null != movie) controller.setCountries(movie, oldCountries, newCountries);
     }
 
     @Override
     public void onDurationChanged(Movie movie, Integer oldDuration, Integer newDuration) {
-        controller.setDuration(movie, oldDuration, newDuration);
+        if (null != movie) controller.setDuration(movie, oldDuration, newDuration);
     }
 
     @Override
     public void onFskChanged(Movie movie, Integer oldFsk, Integer newFsk) {
-        controller.setFsk(movie, oldFsk, newFsk);
+        if (null != movie) controller.setFsk(movie, oldFsk, newFsk);
     }
 
     @Override
     public void onGenreChanged(Movie movie, String oldGenre, String newGenre) {
-        controller.setGenre(movie, oldGenre, newGenre);
+        if (null != movie) controller.setGenre(movie, oldGenre, newGenre);
     }
 
     @Override
     public void onStartDateChanged(Movie movie, LocalDate oldStartDate, LocalDate newStartDate) {
-        controller.setStartDate(movie, oldStartDate, newStartDate);
+        if (null != movie) controller.setStartDate(movie, oldStartDate, newStartDate);
     }
 
     @Override
     public void onNumberOscarsChanged(Movie movie, Integer oldOscars, Integer newOscars) {
-        controller.setNumberOscars(movie, oldOscars, newOscars);
+        if (null != movie) controller.setNumberOscars(movie, oldOscars, newOscars);
     }
 }

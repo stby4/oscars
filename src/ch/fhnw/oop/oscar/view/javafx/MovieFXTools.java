@@ -17,8 +17,8 @@ import java.util.ResourceBundle;
  * Movie Tools
  * Created by Hinrich on 07.06.2016.
  */
-public class MovieFXTools extends ToolBar {
-    private final ResourceBundle STRINGS =  ResourceBundle.getBundle("view.javafx.Strings");
+class MovieFXTools extends ToolBar {
+    private final ResourceBundle STRINGS = ResourceBundle.getBundle("view.javafx.Strings");
     private final IOscarPresenter presenter;
     private final IOscarView parent;
 
@@ -35,7 +35,7 @@ public class MovieFXTools extends ToolBar {
     private FilteredList<Movie> moviesFiltered;
 
 
-    public MovieFXTools(IOscarPresenter presenter, IOscarView parent) {
+    MovieFXTools(IOscarPresenter presenter, IOscarView parent) {
         this.presenter = presenter;
         this.parent = parent;
 
@@ -44,7 +44,7 @@ public class MovieFXTools extends ToolBar {
         addEventHandlers();
     }
 
-    public void setMovies(FilteredList<Movie> moviesFiltered) {
+    void setMovies(FilteredList<Movie> moviesFiltered) {
         this.moviesFiltered = moviesFiltered;
     }
 
@@ -100,5 +100,10 @@ public class MovieFXTools extends ToolBar {
         search.textProperty().addListener((v, o, query) -> {
             presenter.filterMovies(moviesFiltered, query);
         });
+
+        save.setOnAction(event -> presenter.onMoviesSaved());
+
+        add.setOnAction(event -> presenter.onMovieAdded());
+        remove.setOnAction(event -> presenter.onMovieDeleted());
     }
 }

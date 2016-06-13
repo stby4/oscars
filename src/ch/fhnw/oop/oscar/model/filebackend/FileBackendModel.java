@@ -8,6 +8,8 @@ import javafx.collections.transformation.SortedList;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -18,27 +20,43 @@ import java.util.*;
  */
 public class FileBackendModel {
     private ObservableList<Movie> movies = FXCollections.observableArrayList();
+    private final String readPath = "ressources/model/filebackend/movies.csv";
+    private final String rwPath = "ressources/model/filebackend/movies2.csv";
 
     public FileBackendModel() {
-        readFile(Paths.get("ressources/model/filebackend/movies.csv"));
+        try {
+            readFile(Paths.get(rwPath));
+        } catch (Exception e) {
+            try {
+                readFile(Paths.get(readPath));
+            } catch (Exception e2) {
+                // create empty interface
+            }
+        }
     }
 
-    private void readFile(Path filePath) {
+    private void readFile(Path filePath) throws IOException {
         List<String> details;
 
-        try {
-            Scanner scanner = new Scanner(filePath);
-            scanner.nextLine();
+        Scanner scanner = new Scanner(filePath);
+        scanner.nextLine();
 
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                details = Arrays.asList(line.split(";"));
-                Movie movie = new Movie(details);
-                movies.add(movie);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            details = Arrays.asList(line.split(";"));
+            Movie movie = new Movie(details);
+            movies.add(movie);
         }
+    }
+
+    public void writeFile() throws IOException {
+        List<String> lines = new ArrayList<>();
+        lines.add(0, "#id;Title;yearOfAward;director;mainActor;titleEnglish;yearOfProduction;country;duration;fsk;genre;startDate;numberOfOscars");
+
+        movies.forEach(m -> lines.add(m.toString()));
+
+        Path file = Paths.get(rwPath);
+        Files.write(file, lines, Charset.forName("UTF-8"));
     }
 
     public ObservableList<Movie> getMovies() {

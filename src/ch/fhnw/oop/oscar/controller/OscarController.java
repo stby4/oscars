@@ -2,6 +2,7 @@ package ch.fhnw.oop.oscar.controller;
 
 import ch.fhnw.oop.oscar.command.*;
 import ch.fhnw.oop.oscar.model.Movie;
+import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,6 +24,21 @@ public class OscarController {
     public void undo(ICommand command) {
         // TODO
         command.undo();
+    }
+
+    public void addMovie(ObservableList<Movie> movies) {
+        ICommand command = new AddMovie(movies);
+        execute(command);
+    }
+
+    /**
+     * deletes a movie
+     * @param movies all movies
+     * @param movie movie to be deleted
+     */
+    public void deleteMovie(ObservableList<Movie> movies, Movie movie) {
+        ICommand command = new DeleteMovie(movies, movie);
+        execute(command);
     }
 
     public void setTitle(Movie movie, String oldTitle, String newTitle) {

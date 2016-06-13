@@ -3,8 +3,6 @@ package ch.fhnw.oop.oscar.view.javafx;
 import ch.fhnw.oop.oscar.IOscarPresenter;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.view.IOscarView;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -55,60 +53,84 @@ class MovieFXDetails extends BorderPane {
 
         initializeControls();
         layoutControls();
+        addListeners();
+        setDisable(true);
         addEventHandlers();
     }
 
     public void setMovie(Movie movie) {
-        this.movie = movie;
-
         yearLabel.textProperty().unbind();
-        yearLabel.textProperty().bind(movie.yearAwardProperty().asString());
         titleLabel.textProperty().unbind();
-        titleLabel.textProperty().bind(movie.titleProperty());
-        actorsLabel.textProperty().unbind();
-        actorsLabel.textProperty().bind(movie.actorsProperty());
         directorLabel.textProperty().unbind();
-        directorLabel.textProperty().bind(movie.directorProperty());
 
-        movie.countriesProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (null != newValue) {
-                    setCountriesHBox(newValue);
+        if (null != movie) {
+            this.movie = movie;
+
+            yearLabel.textProperty().bind(movie.yearAwardProperty().asString());
+            titleLabel.textProperty().bind(movie.titleProperty());
+
+            setActorsLabel();
+            this.movie.actorsProperty().addListener((v, o, n) -> {
+                if (null != n && !n.equals("")) {
+                    setActorsLabel();
+                } else {
+                    actorsLabel.setText("");
                 }
-            }
-        });
-        setCountriesHBox(movie.getCountries());
+            });
 
-        movie.numberOscarsProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (null != newValue) {
-                    setOscarHBox(newValue.intValue());
+            setDirectorLabel();
+            this.movie.directorProperty().addListener((v, o, n) -> {
+                if (null != n && !n.equals("")) {
+                    setDirectorLabel();
+                } else {
+                    directorLabel.setText("");
                 }
-            }
-        });
+            });
 
-        try {
-            posterImage.setImage(new Image("view/javafx/posters/" + movie.getId() + ".jpg"));
-        } catch (IllegalArgumentException e) {
-            posterImage.setImage(new Image("view/javafx/posters/no_poster.gif"));
+            movie.countriesProperty().addListener((v, o, n) -> {
+                if (null != n) {
+                    setCountriesHBox(n);
+                }
+            });
+            setCountriesHBox(movie.getCountries());
+
+            movie.numberOscarsProperty().addListener((v, o, n) -> {
+                if (null != n) {
+                    setOscarHBox(n.intValue());
+                }
+            });
+
+            try {
+                posterImage.setImage(new Image("view/javafx/posters/" + movie.getId() + ".jpg"));
+            } catch (IllegalArgumentException e) {
+                posterImage.setImage(new Image("view/javafx/posters/no_poster.gif"));
+            }
+
+            year.getValueFactory().setValue(movie.getYearAward());
+            title.setText(movie.getTitle());
+            director.setText(movie.getDirector());
+            actors.setText(movie.getActors());
+            titleEn.setText(movie.getTitleEn());
+            genre.setText(movie.getGenre());
+            yearProduction.getValueFactory().setValue(this.movie.getYearProduction());
+            countries.setText(movie.getCountries());
+            duration.getValueFactory().setValue(movie.getDuration());
+            fsk.setValue(movie.getFsk());
+            fsk.setButtonCell((fsk.getCellFactory()).call(null));
+            startDate.setValue(movie.getStartDate());
+            numberOscars.getValueFactory().setValue(movie.getNumberOscars());
+            setOscarHBox(movie.getNumberOscars());
         }
 
-        year.getValueFactory().setValue(movie.getYearAward());
-        title.setText(movie.getTitle());
-        director.setText(movie.getDirector());
-        actors.setText(movie.getActors());
-        titleEn.setText(movie.getTitleEn());
-        genre.setText(movie.getGenre());
-        yearProduction.getValueFactory().setValue(this.movie.getYearProduction());
-        countries.setText(movie.getCountries());
-        duration.getValueFactory().setValue(movie.getDuration());
-        fsk.setValue(movie.getFsk());
-        fsk.setButtonCell((fsk.getCellFactory()).call(null));
-        startDate.setValue(movie.getStartDate());
-        numberOscars.getValueFactory().setValue(movie.getNumberOscars());
-        setOscarHBox(movie.getNumberOscars());
+        setDisable(null == movie);
+    }
+
+    private void setActorsLabel() {
+        actorsLabel.setText(String.format(STRINGS.getString("WithActors"), movie.getActors()));
+    }
+
+    private void setDirectorLabel() {
+        directorLabel.setText(String.format(STRINGS.getString("FromDirector"), movie.getDirector()));
     }
 
     private ImageView getOscarImageView() {
@@ -145,7 +167,7 @@ class MovieFXDetails extends BorderPane {
         countries.forEach(ctr -> {
             try {
                 countriesHBox.getChildren().add(getCountryImageView(ctr));
-            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
                 // ignore the invalid country string
             }
         });
@@ -204,7 +226,7 @@ class MovieFXDetails extends BorderPane {
 
         startDate = new DatePicker();
         numberOscars = new Spinner<>();
-        numberOscars.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
+        numberOscars.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24));
     }
 
     private void layoutControls() {
@@ -300,11 +322,10 @@ class MovieFXDetails extends BorderPane {
         setTop(poster);
         setBottom(grid);
         setPrefWidth(550);
-        setMaxSize(700, Double.MAX_VALUE);
+        setMaxSize(600, Double.MAX_VALUE);
     }
 
     private void addEventHandlers() {
-
         year.valueProperty().addListener((v, o, n) -> presenter.onYearAwardChanged(movie, o, n));
         title.textProperty().addListener((v, o, n) -> presenter.onTitleChanged(movie, o, n));
         director.textProperty().addListener((v, o, n) -> presenter.onDirectorChanged(movie, o, n));
@@ -319,14 +340,39 @@ class MovieFXDetails extends BorderPane {
         numberOscars.valueProperty().addListener((v, o, n) -> presenter.onNumberOscarsChanged(movie, o, n));
     }
 
-    private void addValueChangeListeners() {
-    }
+    private void addListeners() {
+        disabledProperty().addListener((v, o, n) -> {
+            if (n) {
+                movie = null;
+                yearLabel.setText("");
+                titleLabel.setText("");
+                directorLabel.setText("");
+                actorsLabel.setText("");
+                numberOscarsHBox.getChildren().clear();
+                posterImage.setImage(null);
+                countriesHBox.getChildren().clear();
 
-    private void addBindings() {
-
-    }
-
-    private void setNumberOfOscars(int numberOfOscars) {
-        //oscarsHBox.getChildren().clear();
+                if (null != year.getValueFactory()) {
+                    year.getValueFactory().setValue(0);
+                }
+                title.setText("");
+                director.setText("");
+                actors.setText("");
+                titleEn.setText("");
+                genre.setText("");
+                if (null != yearProduction) {
+                    yearProduction.getValueFactory().setValue(0);
+                }
+                countries.setText("");
+                if (null != duration.getValueFactory()) {
+                    duration.getValueFactory().setValue(0);
+                }
+                fsk.setValue(0);
+                startDate.setValue(null);
+                if (null != numberOscars.getValueFactory()) {
+                    numberOscars.getValueFactory().setValue(0);
+                }
+            }
+        });
     }
 }
