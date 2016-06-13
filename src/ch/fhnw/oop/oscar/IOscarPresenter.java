@@ -37,6 +37,18 @@ public interface IOscarPresenter {
 
     void onMoviesSaved();
 
+    /**
+     * undo
+     * @param number number of undos
+     */
+    void onUndo(int number);
+
+    /**
+     * redo
+     * @param number number of redos
+     */
+    void onRedo(int number);
+
 
     void onTitleChanged(Movie movie, String oldTitle, String newTitle);
 

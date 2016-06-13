@@ -13,17 +13,47 @@ import java.util.List;
  * Created by Hinrich on 12.06.2016.
  */
 public class OscarController {
-    private List<ICommand> executeList = new ArrayList<>();
-    private List<ICommand> undoList = new ArrayList<>();
+    private final List<ICommand> executeList = new ArrayList<>();
+    private final List<ICommand> undoList = new ArrayList<>();
 
     public void execute(ICommand command) {
         command.execute();
         executeList.add(command);
     }
 
+    public void execute(int number) {
+        for (int i = 0; i < number; i++) {
+            try {
+                ICommand command = undoList.remove(executeList.size() - 1);
+                execute(command);
+            } catch (Exception e) {
+                return;
+            }
+        }
+    }
+
     public void undo(ICommand command) {
-        // TODO
         command.undo();
+        undoList.add(command);
+    }
+
+    public void undo(int number) {
+        for (int i = 0; i < number; i++) {
+            try {
+                ICommand command = executeList.remove(executeList.size() - 1);
+                undo(command);
+            } catch (Exception e) {
+                return;
+            }
+        }
+    }
+
+    public List<ICommand> getExecuteList() {
+        return executeList;
+    }
+
+    public List<ICommand> getUndoList() {
+        return undoList;
     }
 
     public void addMovie(ObservableList<Movie> movies) {
@@ -33,8 +63,9 @@ public class OscarController {
 
     /**
      * deletes a movie
+     *
      * @param movies all movies
-     * @param movie movie to be deleted
+     * @param movie  movie to be deleted
      */
     public void deleteMovie(ObservableList<Movie> movies, Movie movie) {
         ICommand command = new DeleteMovie(movies, movie);

@@ -1,6 +1,7 @@
 package ch.fhnw.oop.oscar.view.javafx;
 
 import ch.fhnw.oop.oscar.OscarPresenter;
+import ch.fhnw.oop.oscar.command.ICommand;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.view.IOscarView;
 import javafx.beans.value.ChangeListener;
@@ -12,6 +13,8 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -25,9 +28,13 @@ class OscarFXView extends VBox implements IOscarView {
     private MovieFXDetails movieDetails;
     private FilteredList<Movie> moviesFiltered;
     private Movie selectedMovie;
+    private final List<ICommand> executeList;
+    private final List<ICommand> undoList;
 
     OscarFXView() {
         presenter = new OscarPresenter(this);
+        executeList = presenter.getExecuteList();
+        undoList = presenter.getUndoList();
 
         initializeControls();
         layoutControls();
@@ -64,7 +71,7 @@ class OscarFXView extends VBox implements IOscarView {
     }
 
     private void initializeControls() {
-        toolBar = new MovieFXTools(presenter, this);
+        toolBar = new MovieFXTools(presenter, executeList, undoList);
         movieSelector = new MovieFXSelector<>(presenter, this);
         movieDetails = new MovieFXDetails(presenter, this);
     }

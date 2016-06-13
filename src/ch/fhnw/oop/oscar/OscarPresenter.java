@@ -1,5 +1,6 @@
 package ch.fhnw.oop.oscar;
 
+import ch.fhnw.oop.oscar.command.ICommand;
 import ch.fhnw.oop.oscar.controller.OscarController;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.model.filebackend.FileBackendModel;
@@ -9,6 +10,8 @@ import javafx.collections.transformation.FilteredList;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Presenter
@@ -19,12 +22,24 @@ public class OscarPresenter implements IOscarPresenter {
     private final FileBackendModel model;
     private final OscarController controller;
     private final ObservableList<Movie> movies;
+    private final List<ICommand> executeList;
+    private final List<ICommand> undoList;
 
     public OscarPresenter(IOscarView view) {
         this.view = view;
         model = new FileBackendModel();
         movies = model.getMovies();
         controller = new OscarController();
+        executeList = controller.getExecuteList();
+        undoList = controller.getUndoList();
+    }
+
+    public List<ICommand> getExecuteList() {
+        return executeList;
+    }
+
+    public List<ICommand> getUndoList() {
+        return undoList;
     }
 
     @Override
@@ -58,8 +73,22 @@ public class OscarPresenter implements IOscarPresenter {
         try {
             model.writeFile();
         } catch (IOException e) {
-// TODO
+            // TODO
         }
+    }
+
+    @Override
+    public void onUndo(int number) {
+        controller.undo(number);
+        // refresh edit field
+        view.onMovieSelected(view.getSelectedMovie());
+    }
+
+    @Override
+    public void onRedo(int number) {
+        controller.execute(number);
+        // refresh edit field
+        view.onMovieSelected(view.getSelectedMovie());
     }
 
     @Override

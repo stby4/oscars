@@ -3,6 +3,7 @@ package ch.fhnw.oop.oscar.view.javafx;
 import ch.fhnw.oop.oscar.IOscarPresenter;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.view.IOscarView;
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -11,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -25,6 +27,19 @@ class MovieFXDetails extends BorderPane {
     private final IOscarPresenter presenter;
     private final IOscarView parent;
     private Movie movie;
+
+    private ChangeListener<Integer> yearChanged;
+    private ChangeListener<String> titleChanged;
+    private ChangeListener<String> directorChanged;
+    private ChangeListener<String> actorsChanged;
+    private ChangeListener<String> titleEnChanged;
+    private ChangeListener<String> genreChanged;
+    private ChangeListener<Integer> yearProductionChanged;
+    private ChangeListener<String> countriesChanged;
+    private ChangeListener<Integer> durationChanged;
+    private ChangeListener<Integer> fskChanged;
+    private ChangeListener<LocalDate> startDateChanged;
+    private ChangeListener<Integer> numberOscarsChanged;
 
     private Label yearLabel;
     private Label titleLabel;
@@ -55,13 +70,13 @@ class MovieFXDetails extends BorderPane {
         layoutControls();
         addListeners();
         setDisable(true);
-        addEventHandlers();
     }
 
     public void setMovie(Movie movie) {
         yearLabel.textProperty().unbind();
         titleLabel.textProperty().unbind();
         directorLabel.textProperty().unbind();
+        removeListeners();
 
         if (null != movie) {
             this.movie = movie;
@@ -123,6 +138,8 @@ class MovieFXDetails extends BorderPane {
         }
 
         setDisable(null == movie);
+
+        addListeners();
     }
 
     private void setActorsLabel() {
@@ -325,19 +342,7 @@ class MovieFXDetails extends BorderPane {
         setMaxSize(600, Double.MAX_VALUE);
     }
 
-    private void addEventHandlers() {
-        year.valueProperty().addListener((v, o, n) -> presenter.onYearAwardChanged(movie, o, n));
-        title.textProperty().addListener((v, o, n) -> presenter.onTitleChanged(movie, o, n));
-        director.textProperty().addListener((v, o, n) -> presenter.onDirectorChanged(movie, o, n));
-        actors.textProperty().addListener((v, o, n) -> presenter.onActorsChanged(movie, o, n));
-        titleEn.textProperty().addListener((v, o, n) -> presenter.onTitleEnChanged(movie, o, n));
-        genre.textProperty().addListener((v, o, n) -> presenter.onGenreChanged(movie, o, n));
-        yearProduction.valueProperty().addListener((v, o, n) -> presenter.onYearProductionChanged(movie, o, n));
-        countries.textProperty().addListener((v, o, n) -> presenter.onCountriesChanged(movie, o, n));
-        duration.valueProperty().addListener((v, o, n) -> presenter.onDurationChanged(movie, o, n));
-        fsk.valueProperty().addListener((v, o, n) -> presenter.onFskChanged(movie, o, n));
-        startDate.valueProperty().addListener((v, o, n) -> presenter.onStartDateChanged(movie, o, n));
-        numberOscars.valueProperty().addListener((v, o, n) -> presenter.onNumberOscarsChanged(movie, o, n));
+    private void removeEventHandlers() {
     }
 
     private void addListeners() {
@@ -374,5 +379,56 @@ class MovieFXDetails extends BorderPane {
                 }
             }
         });
+
+        yearChanged = (v, o, n) -> presenter.onYearAwardChanged(movie, o, n);
+        year.valueProperty().addListener(yearChanged);
+
+        titleChanged = (v, o, n) -> presenter.onTitleChanged(movie, o, n);
+        title.textProperty().addListener(titleChanged);
+
+        directorChanged = (v, o, n) -> presenter.onDirectorChanged(movie, o, n);
+        director.textProperty().addListener(directorChanged);
+
+        actorsChanged = (v, o, n) -> presenter.onActorsChanged(movie, o, n);
+        actors.textProperty().addListener(actorsChanged);
+
+        titleEnChanged = (v, o, n) -> presenter.onTitleEnChanged(movie, o, n);
+        titleEn.textProperty().addListener(titleEnChanged);
+
+        genreChanged = (v, o, n) -> presenter.onGenreChanged(movie, o, n);
+        genre.textProperty().addListener(genreChanged);
+
+        yearProductionChanged = (v, o, n) -> presenter.onYearProductionChanged(movie, o, n);
+        yearProduction.valueProperty().addListener(yearProductionChanged);
+
+        countriesChanged = (v, o, n) -> presenter.onCountriesChanged(movie, o, n);
+        countries.textProperty().addListener(countriesChanged);
+
+        durationChanged = (v, o, n) -> presenter.onDurationChanged(movie, o, n);
+        duration.valueProperty().addListener(durationChanged);
+
+        fskChanged = (v, o, n) -> presenter.onFskChanged(movie, o, n);
+        fsk.valueProperty().addListener(fskChanged);
+
+        startDateChanged = (v, o, n) -> presenter.onStartDateChanged(movie, o, n);
+        startDate.valueProperty().addListener(startDateChanged);
+
+        numberOscarsChanged = (v, o, n) -> presenter.onNumberOscarsChanged(movie, o, n);
+        numberOscars.valueProperty().addListener(numberOscarsChanged);
+    }
+
+    private void removeListeners() {
+        year.valueProperty().removeListener(yearChanged);
+        title.textProperty().removeListener(titleChanged);
+        director.textProperty().removeListener(directorChanged);
+        actors.textProperty().removeListener(actorsChanged);
+        titleEn.textProperty().removeListener(titleEnChanged);
+        genre.textProperty().removeListener(genreChanged);
+        yearProduction.valueProperty().removeListener(yearProductionChanged);
+        countries.textProperty().removeListener(countriesChanged);
+        duration.valueProperty().removeListener(durationChanged);
+        fsk.valueProperty().removeListener(fskChanged);
+        startDate.valueProperty().removeListener(startDateChanged);
+        numberOscars.valueProperty().removeListener(numberOscarsChanged);
     }
 }

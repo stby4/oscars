@@ -1,6 +1,7 @@
 package ch.fhnw.oop.oscar.view.javafx;
 
 import ch.fhnw.oop.oscar.IOscarPresenter;
+import ch.fhnw.oop.oscar.command.ICommand;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.view.IOscarView;
 import javafx.collections.transformation.FilteredList;
@@ -11,6 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -20,7 +23,8 @@ import java.util.ResourceBundle;
 class MovieFXTools extends ToolBar {
     private final ResourceBundle STRINGS = ResourceBundle.getBundle("view.javafx.Strings");
     private final IOscarPresenter presenter;
-    private final IOscarView parent;
+    private final List<ICommand> executeList;
+    private final List<ICommand> undoList;
 
     private Button save;
 
@@ -35,9 +39,10 @@ class MovieFXTools extends ToolBar {
     private FilteredList<Movie> moviesFiltered;
 
 
-    MovieFXTools(IOscarPresenter presenter, IOscarView parent) {
+    MovieFXTools(IOscarPresenter presenter, List<ICommand> executeList, List<ICommand> undoList) {
         this.presenter = presenter;
-        this.parent = parent;
+        this.executeList = executeList;
+        this.undoList = undoList;
 
         initializeControls();
         layoutControls();
@@ -68,13 +73,13 @@ class MovieFXTools extends ToolBar {
         undo = new Button();
         undo.setGraphic(new ImageView(imageUndo));
         undo.setTooltip(new Tooltip(STRINGS.getString("Undo")));
-        undo.setDisable(true);
+        //undo.setDisable(true);
 
         Image imageRedo = new Image("view/javafx/icons/redo.svg.png", true);
         redo = new Button();
         redo.setGraphic(new ImageView(imageRedo));
         redo.setTooltip(new Tooltip(STRINGS.getString("Redo")));
-        redo.setDisable(true);
+        //redo.setDisable(true);
 
         search = new TextField();
         search.setId("search_tf");
@@ -105,5 +110,8 @@ class MovieFXTools extends ToolBar {
 
         add.setOnAction(event -> presenter.onMovieAdded());
         remove.setOnAction(event -> presenter.onMovieDeleted());
+
+        undo.setOnAction(event -> presenter.onUndo(1));
+        redo.setOnAction(event -> presenter.onRedo(1));
     }
 }
