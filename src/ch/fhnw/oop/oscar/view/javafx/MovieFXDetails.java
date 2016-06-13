@@ -3,28 +3,26 @@ package ch.fhnw.oop.oscar.view.javafx;
 import ch.fhnw.oop.oscar.IOscarPresenter;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.view.IOscarView;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
-import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
  * MovieFXDetails
  * Created by Hinrich on 07.06.2016.
  */
-class MovieFXDetails extends VBox {
+class MovieFXDetails extends BorderPane {
     private final ResourceBundle STRINGS = ResourceBundle.getBundle("view.javafx.Strings");
     private final IOscarPresenter presenter;
     private final IOscarView parent;
@@ -72,26 +70,30 @@ class MovieFXDetails extends VBox {
         directorLabel.textProperty().unbind();
         directorLabel.textProperty().bind(movie.directorProperty());
 
+        movie.countriesProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (null != newValue) {
+                    setCountriesHBox(newValue);
+                }
+            }
+        });
+        setCountriesHBox(movie.getCountries());
+
         movie.numberOscarsProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                //System.out.println("HERE I AM: "+ oldValue + ", " + newValue);
                 if (null != newValue) {
-                    // have to use children count of HBOX because... reasons (Java)
-                    int difference = newValue.intValue() - numberOscarsHBox.getChildren().size();
-                    if (0 < difference) {
-                        for (int i = 0; i < difference; i++) {
-                            numberOscarsHBox.getChildren().add(getOscarImageView());
-                        }
-                    } else if (0 > difference) {
-                        for (int i = 0; i < -difference; i++) {
-                            numberOscarsHBox.getChildren().remove(numberOscarsHBox.getChildren().size() - 1);
-                        }
-                    }
+                    setOscarHBox(newValue.intValue());
                 }
             }
         });
 
+        try {
+            posterImage.setImage(new Image("view/javafx/posters/" + movie.getId() + ".jpg"));
+        } catch (IllegalArgumentException e) {
+            posterImage.setImage(new Image("view/javafx/posters/no_poster.gif"));
+        }
 
         year.getValueFactory().setValue(movie.getYearAward());
         title.setText(movie.getTitle());
@@ -106,6 +108,7 @@ class MovieFXDetails extends VBox {
         fsk.setButtonCell((fsk.getCellFactory()).call(null));
         startDate.setValue(movie.getStartDate());
         numberOscars.getValueFactory().setValue(movie.getNumberOscars());
+        setOscarHBox(movie.getNumberOscars());
     }
 
     private ImageView getOscarImageView() {
@@ -113,6 +116,39 @@ class MovieFXDetails extends VBox {
         oscar.setFitHeight(40);
         oscar.setFitWidth(16);
         return oscar;
+    }
+
+    private void setOscarHBox(int numberOscars) {
+        // have to use children count of HBOX because... reasons (Java)
+        int difference = numberOscars - numberOscarsHBox.getChildren().size();
+        if (0 < difference) {
+            for (int i = 0; i < difference; i++) {
+                numberOscarsHBox.getChildren().add(getOscarImageView());
+            }
+        } else if (0 > difference) {
+            for (int i = 0; i < -difference; i++) {
+                numberOscarsHBox.getChildren().remove(numberOscarsHBox.getChildren().size() - 1);
+            }
+        }
+    }
+
+    private ImageView getCountryImageView(String country) {
+        ImageView countryIV = new ImageView(new Image("view/javafx/flags/" + country.toLowerCase() + ".png"));
+        countryIV.setFitHeight(24);
+        countryIV.setFitWidth(24);
+        return countryIV;
+    }
+
+    private void setCountriesHBox(String countriesString) {
+        countriesHBox.getChildren().clear();
+        List<String> countries = Arrays.asList(countriesString.split("/"));
+        countries.forEach(ctr -> {
+            try {
+                countriesHBox.getChildren().add(getCountryImageView(ctr));
+            } catch (IllegalArgumentException e) {
+                // ignore the invalid country string
+            }
+        });
     }
 
     private void initializeControls() {
@@ -173,22 +209,36 @@ class MovieFXDetails extends VBox {
 
     private void layoutControls() {
         // poster area
-        HBox top = new HBox();
-        top.getChildren().add(0, yearLabel);
-        top.getChildren().add(1, countriesHBox);
+        countriesHBox.setMinHeight(24);
+        yearLabel.setId("details_year");
+        BorderPane top = new BorderPane();
+        top.setLeft(yearLabel);
+        top.setRight(countriesHBox);
+        top.setMaxWidth(Double.MAX_VALUE);
+        top.setPadding(new Insets(0, 10, 0, 0));
 
+        titleLabel.setId("details_title");
+        directorLabel.setId("details_director");
+        actorsLabel.setId("details_actors");
         VBox left = new VBox();
         left.getChildren().add(0, top);
         left.getChildren().add(1, titleLabel);
-        left.getChildren().add(2, actorsLabel);
-        left.getChildren().add(3, numberOscarsHBox);
+        left.getChildren().add(2, directorLabel);
+        left.getChildren().add(3, actorsLabel);
+        left.getChildren().add(4, numberOscarsHBox);
+        numberOscarsHBox.setMinHeight(40);
+        numberOscarsHBox.setPadding(new Insets(0, 2, 0, 2));
 
-        HBox poster = new HBox();
+        BorderPane poster = new BorderPane();
         poster.setPadding(new Insets(20));
         poster.setMaxWidth(Double.MAX_VALUE);
+        //poster.setPrefWidth(Double.MAX_VALUE);
+        //BorderPane.setHgrow(poster, Priority.ALWAYS);
+        posterImage.setFitHeight(237);
+        posterImage.setPreserveRatio(true);
 
-        poster.getChildren().add(0, left);
-        poster.getChildren().add(1, posterImage);
+        poster.setCenter(left);
+        poster.setRight(posterImage);
 
         // edit area
         GridPane grid = new GridPane();
@@ -196,6 +246,7 @@ class MovieFXDetails extends VBox {
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setMaxWidth(Double.MAX_VALUE);
+        GridPane.setHgrow(grid, Priority.ALWAYS);
 
         // Year
         grid.add(new Text(STRINGS.getString("Year")), 0, 0);
@@ -235,6 +286,7 @@ class MovieFXDetails extends VBox {
 
         // FSK
         grid.add(new Text(STRINGS.getString("FSKRating")), 0, 7);
+        fsk.setMinSize(102, 72);
         grid.add(fsk, 1, 7);
 
         // Start in cinemas
@@ -245,7 +297,10 @@ class MovieFXDetails extends VBox {
         grid.add(new Text(STRINGS.getString("Oscars")), 0, 8);
         grid.add(numberOscars, 1, 8, 3, 1);
 
-        getChildren().add(new VBox(poster, grid));
+        setTop(poster);
+        setBottom(grid);
+        setPrefWidth(550);
+        setMaxSize(700, Double.MAX_VALUE);
     }
 
     private void addEventHandlers() {

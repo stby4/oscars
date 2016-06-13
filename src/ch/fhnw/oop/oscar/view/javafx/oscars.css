@@ -4,3 +4,25 @@
   -fx-background-position: right center;
   -fx-font-size: 20;
 }
+
+#details_year {
+    -fx-font-weight: bold;
+    -fx-font-size: 1.4em;
+}
+
+#details_title {
+    -fx-font-weight: bold;
+    -fx-font-size: 2.4em;
+    -fx-padding: 0.4em 0 0.4em 0;
+}
+
+#details_director {
+    -fx-font-weight: bold;
+    -fx-font-size: 1.4em;
+    -fx-padding: 0 0 0.2em 0;
+}
+
+#details_actors {
+    -fx-font-weight: bold;
+    -fx-font-size: 1.4em;
+}

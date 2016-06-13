@@ -81,6 +81,7 @@ public class OscarController {
     }
 
     public void setNumberOscars(Movie movie, Integer oldOscars, Integer newOscars) {
-
+        ICommand command = new SetNumberOscars(movie, oldOscars, newOscars);
+        execute(command);
     }
 }
