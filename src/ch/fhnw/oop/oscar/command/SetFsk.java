@@ -7,6 +7,11 @@ import ch.fhnw.oop.oscar.model.Movie;
  * Created by Hinrich on 12.06.2016.
  */
 public class SetFsk extends MovieCommand<Movie.Fsk> {
+    /**
+     * @param movie the movie
+     * @param oldValue old fsk
+     * @param newValue new fsk
+     */
     public SetFsk(Movie movie, Movie.Fsk oldValue, Movie.Fsk newValue) {
         super(movie, oldValue, newValue);
         description.append(String.format(STRINGS.getString("ChangedFsk"), oldValue, newValue));

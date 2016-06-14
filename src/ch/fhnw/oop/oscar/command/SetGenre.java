@@ -7,6 +7,11 @@ import ch.fhnw.oop.oscar.model.Movie;
  * Created by Hinrich on 12.06.2016.
  */
 public class SetGenre extends MovieCommand<String> {
+    /**
+     * @param movie    the movie
+     * @param oldValue old genre
+     * @param newValue new genre
+     */
     public SetGenre(Movie movie, String oldValue, String newValue) {
         super(movie, oldValue, newValue);
 

@@ -3,10 +3,16 @@ package ch.fhnw.oop.oscar.command;
 import ch.fhnw.oop.oscar.model.Movie;
 
 /**
- * old value
+ * set oscar number
  * Created by Hinrich on 12.06.2016.
  */
 public class SetNumberOscars extends MovieCommand<Integer> {
+    /**
+     *
+     * @param movie the movie
+     * @param oldValue old oscar number
+     * @param newValue new oscar number
+     */
     public SetNumberOscars(Movie movie, Integer oldValue, Integer newValue) {
         super(movie, oldValue, newValue);
 

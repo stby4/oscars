@@ -7,6 +7,11 @@ import ch.fhnw.oop.oscar.model.Movie;
  * Created by Hinrich on 12.06.2016.
  */
 public class SetCountries extends MovieCommand<String> {
+    /**
+     * @param movie the movie
+     * @param oldValue old countries
+     * @param newValue new countries
+     */
     public SetCountries(Movie movie, String oldValue, String newValue) {
         super(movie, oldValue, newValue);
         description.append(String.format(STRINGS.getString("ChangedCountries"), oldValue, newValue));

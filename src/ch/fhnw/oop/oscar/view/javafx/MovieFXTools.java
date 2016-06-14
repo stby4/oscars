@@ -40,7 +40,13 @@ class MovieFXTools extends ToolBar {
 
     private FilteredList<Movie> moviesFiltered;
 
-
+    /**
+     * constructor
+     *
+     * @param presenter   the presenter to be used
+     * @param executeList list with execute commands @see IOscarController
+     * @param undoList    list with undo commands @see IOscarController
+     */
     MovieFXTools(IOscarPresenter presenter, ObservableList<ICommand> executeList, ObservableList<ICommand> undoList) {
         this.presenter = presenter;
         this.executeList = executeList;
@@ -52,8 +58,26 @@ class MovieFXTools extends ToolBar {
         addListeners();
     }
 
+    /**
+     * invoke movies
+     *
+     * @param moviesFiltered the movies
+     */
     void setMovies(FilteredList<Movie> moviesFiltered) {
         this.moviesFiltered = moviesFiltered;
+    }
+
+    /**
+     * set selected movie
+     *
+     * @param movie the movie
+     */
+    void setMovie(Movie movie) {
+        if (null != movie) {
+            remove.setDisable(false);
+        } else {
+            remove.setDisable(true);
+        }
     }
 
     private void initializeControls() {
@@ -71,6 +95,7 @@ class MovieFXTools extends ToolBar {
         remove = new Button();
         remove.setGraphic(new ImageView(imageRemove));
         remove.setTooltip(new Tooltip(STRINGS.getString("Remove")));
+        remove.setDisable(true);
 
         Image imageUndo = new Image("view/javafx/icons/undo.svg.png", true);
         undo = new Button();

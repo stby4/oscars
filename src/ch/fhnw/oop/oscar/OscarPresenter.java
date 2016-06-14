@@ -1,6 +1,7 @@
 package ch.fhnw.oop.oscar;
 
 import ch.fhnw.oop.oscar.command.ICommand;
+import ch.fhnw.oop.oscar.controller.IOscarController;
 import ch.fhnw.oop.oscar.controller.OscarController;
 import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.model.StringDistance;
@@ -21,11 +22,16 @@ import java.util.List;
 public class OscarPresenter implements IOscarPresenter {
     private final IOscarView view;
     private final FileBackendModel model;
-    private final OscarController controller;
+    private final IOscarController controller;
     private final ObservableList<Movie> movies;
     private final ObservableList<ICommand> executeList;
     private final ObservableList<ICommand> undoList;
 
+    /**
+     * constructor
+     *
+     * @param view the view to be associated with the presenter
+     */
     public OscarPresenter(IOscarView view) {
         this.view = view;
         model = new FileBackendModel();
@@ -50,6 +56,13 @@ public class OscarPresenter implements IOscarPresenter {
         view.setMovies(movies);
     }
 
+    /**
+     * filter movies by query. fuzzy search is used.
+     * filtered fields: title, actors, director
+     *
+     * @param moviesFiltered all movies to be filtered
+     * @param query          the seartch term
+     */
     public void filterMovies(FilteredList<Movie> moviesFiltered, String query) {
         if (null != moviesFiltered) {
             moviesFiltered.setPredicate(movie -> {

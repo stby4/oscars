@@ -24,7 +24,7 @@ public class OscarFXApplication extends Application {
         primaryStage.setWidth(1200);
         primaryStage.setMinWidth(700);
         primaryStage.setMinHeight(820);
-        primaryStage.setHeight(820);
+        primaryStage.setHeight(840);
         primaryStage.setTitle(STRINGS.getString("Oscars"));
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -15,6 +15,11 @@ public abstract class MovieCommand<T> implements ICommand {
     protected final T oldValue;
     protected final T newValue;
 
+    /**
+     * @param movie the edited movie
+     * @param oldValue old value (should be similar to current value in movie)
+     * @param newValue old new walue
+     */
     public MovieCommand(Movie movie, T oldValue, T newValue) {
         this.movie = movie;
         this.oldValue = oldValue;

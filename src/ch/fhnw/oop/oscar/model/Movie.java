@@ -54,6 +54,10 @@ public class Movie {
         addListeners();
     }
 
+    /**
+     * create empty movie with specified id
+     * @param id id of the movie, will be used to reference posters
+     */
     public Movie(int id) {
         setId(id);
         setTitle("");
@@ -70,6 +74,10 @@ public class Movie {
         setNumberOscars(1);
     }
 
+    /**
+     * create a movie out of parsed string
+     * @param line list of fields with movie values
+     */
     public Movie(List<String> line) {
         setId(Integer.valueOf(line.get(0)));
         setTitle(line.get(1));

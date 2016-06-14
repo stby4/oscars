@@ -7,6 +7,11 @@ import ch.fhnw.oop.oscar.model.Movie;
  * Created by Hinrich on 12.06.2016.
  */
 public class SetDuration extends MovieCommand<Integer> {
+    /**
+     * @param movie the movie
+     * @param oldValue old duration
+     * @param newValue new duration
+     */
     public SetDuration(Movie movie, Integer oldValue, Integer newValue) {
         super(movie, oldValue, newValue);
         description.append(String.format(STRINGS.getString("ChangedDuration"), oldValue, newValue));

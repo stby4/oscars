@@ -11,6 +11,11 @@ import java.time.format.FormatStyle;
  * Created by Hinrich on 12.06.2016.
  */
 public class SetStartDate extends MovieCommand<LocalDate> {
+    /**
+     * @param movie    the movie
+     * @param oldValue old start date
+     * @param newValue new start date
+     */
     public SetStartDate(Movie movie, LocalDate oldValue, LocalDate newValue) {
         super(movie, oldValue, newValue);
         DateTimeFormatter fmt = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);

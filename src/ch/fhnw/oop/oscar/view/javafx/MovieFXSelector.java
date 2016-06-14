@@ -5,6 +5,8 @@ import ch.fhnw.oop.oscar.model.Movie;
 import ch.fhnw.oop.oscar.view.IOscarView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -22,27 +24,28 @@ import java.util.ResourceBundle;
 class MovieFXSelector<T extends Movie> extends TableView {
     private final ResourceBundle STRINGS = ResourceBundle.getBundle("view.javafx.Strings");
     private final IOscarPresenter presenter;
-    private final IOscarView parent;
 
     private TableColumn editedCol;
     private TableColumn<T, Integer> yearAwardCol;
     private TableColumn<T, String> titleCol;
-    TableColumn<T, String> directorCol;
-    TableColumn<T, String> actorsCol;
+    private TableColumn<T, String> directorCol;
+    private TableColumn<T, String> actorsCol;
 
-    @SuppressWarnings("unchecked")
-    MovieFXSelector(IOscarPresenter presenter, IOscarView parent) {
+    /**
+     * constructor
+     *
+     * @param presenter the presenter
+     */
+    MovieFXSelector(IOscarPresenter presenter) {
         this.presenter = presenter;
-        this.parent = parent;
 
         initializeControls();
         layoutControls();
         addEventHandlers();
         addValueChangeListeners();
-        addBindings();
     }
 
-
+    @SuppressWarnings("unchecked")
     private void initializeControls() {
 
         editedCol = new TableColumn<>();
@@ -51,7 +54,7 @@ class MovieFXSelector<T extends Movie> extends TableView {
         editedCol.setCellFactory(new Callback<TableColumn<T, Boolean>, TableCell<T, Boolean>>() {
             @Override
             public TableCell<T, Boolean> call(TableColumn<T, Boolean> param) {
-                TableCell<T, Boolean> cell = new TableCell<T, Boolean>() {
+                return new TableCell<T, Boolean>() {
                     @Override
                     protected void updateItem(Boolean item, boolean empty) {
                         if (null != item) {
@@ -71,7 +74,6 @@ class MovieFXSelector<T extends Movie> extends TableView {
                         }
                     }
                 };
-                return cell;
             }
         });
 
@@ -104,8 +106,22 @@ class MovieFXSelector<T extends Movie> extends TableView {
                 presenter.onMovieSelected((T) n);
             }
         });
+
     }
 
-    private void addBindings() {
+    @SuppressWarnings("unchecked")
+    public void setMovies(ObservableList<Movie> movies) {
+        setItems(movies);
+
+        movies.addListener(new ListChangeListener() {
+            @Override
+            public void onChanged(Change c) {
+                while (c.next()) {
+                    if (c.wasAdded()) {
+                        getSelectionModel().select(movies.get(movies.size() - 1));
+                    }
+                }
+            }
+        });
     }
 }

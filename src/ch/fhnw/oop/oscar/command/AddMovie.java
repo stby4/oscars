@@ -6,7 +6,7 @@ import javafx.collections.ObservableList;
 import java.util.ResourceBundle;
 
 /**
- * add a new, empty
+ * add a new, empty movie
  * Created by hinri on 13.06.2016.
  */
 public class AddMovie implements ICommand {
@@ -14,6 +14,9 @@ public class AddMovie implements ICommand {
     private final ObservableList<Movie> movies;
     private final Movie movie;
 
+    /**
+     * @param movies list of movies, to which the new movie will be added
+     */
     public AddMovie(ObservableList<Movie> movies) {
         this.movies = movies;
 

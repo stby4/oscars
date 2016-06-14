@@ -20,12 +20,12 @@ import java.util.ResourceBundle;
 
 /**
  * MovieFXDetails
+ * shows movie details and has form to change them
  * Created by Hinrich on 07.06.2016.
  */
 class MovieFXDetails extends BorderPane {
     private final ResourceBundle STRINGS = ResourceBundle.getBundle("view.javafx.Strings");
     private final IOscarPresenter presenter;
-    private final IOscarView parent;
     private Movie movie;
 
     private ChangeListener<Integer> yearChanged;
@@ -62,9 +62,13 @@ class MovieFXDetails extends BorderPane {
     private DatePicker startDate;
     private Spinner<Integer> numberOscars;
 
-    MovieFXDetails(IOscarPresenter presenter, IOscarView parent) {
+    /**
+     * constructor
+     *
+     * @param presenter presenter to be used
+     */
+    MovieFXDetails(IOscarPresenter presenter) {
         this.presenter = presenter;
-        this.parent = parent;
 
         initializeControls();
         layoutControls();
@@ -72,6 +76,11 @@ class MovieFXDetails extends BorderPane {
         setDisable(true);
     }
 
+    /**
+     * set the movie to be displayed and edited
+     *
+     * @param movie the movie
+     */
     public void setMovie(Movie movie) {
         yearLabel.textProperty().unbind();
         titleLabel.textProperty().unbind();
@@ -142,14 +151,25 @@ class MovieFXDetails extends BorderPane {
         addListeners();
     }
 
+    /**
+     * set localized actors label
+     */
     private void setActorsLabel() {
         actorsLabel.setText(String.format(STRINGS.getString("WithActors"), movie.getActors()));
     }
 
+    /**
+     * set localized director label
+     */
     private void setDirectorLabel() {
         directorLabel.setText(String.format(STRINGS.getString("FromDirector"), movie.getDirector()));
     }
 
+    /**
+     * get image view with little oscar image
+     *
+     * @return image with oscar
+     */
     private ImageView getOscarImageView() {
         ImageView oscar = new ImageView(new Image("view/javafx/Oscar-logo.png"));
         oscar.setFitHeight(40);
@@ -157,6 +177,11 @@ class MovieFXDetails extends BorderPane {
         return oscar;
     }
 
+    /**
+     * create numberOscars views of oscar image
+     *
+     * @param numberOscars number of oscars
+     */
     private void setOscarHBox(int numberOscars) {
         // have to use children count of HBOX because... reasons (Java)
         int difference = numberOscars - numberOscarsHBox.getChildren().size();
@@ -171,6 +196,12 @@ class MovieFXDetails extends BorderPane {
         }
     }
 
+    /**
+     * get image view with ocuntry flag
+     *
+     * @param country iso2 country code
+     * @return the flag
+     */
     private ImageView getCountryImageView(String country) {
         ImageView countryIV = new ImageView(new Image("view/javafx/flags/" + country.toLowerCase() + ".png"));
         countryIV.setFitHeight(24);
@@ -178,6 +209,11 @@ class MovieFXDetails extends BorderPane {
         return countryIV;
     }
 
+    /**
+     * show all flags of involved countries
+     *
+     * @param countriesString string with iso2 country codes, delimited by /
+     */
     private void setCountriesHBox(String countriesString) {
         countriesHBox.getChildren().clear();
         List<String> countries = Arrays.asList(countriesString.split("/"));

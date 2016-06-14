@@ -7,6 +7,11 @@ import ch.fhnw.oop.oscar.model.Movie;
  * Created by Hinrich on 12.06.2016.
  */
 public class SetYearProduction extends MovieCommand<Integer> {
+    /**
+     * @param movie    the movie
+     * @param oldValue old production year
+     * @param newValue new production year
+     */
     public SetYearProduction(Movie movie, Integer oldValue, Integer newValue) {
         super(movie, oldValue, newValue);
         description.append(String.format(STRINGS.getString("ChangedYearProduction"), oldValue, newValue));

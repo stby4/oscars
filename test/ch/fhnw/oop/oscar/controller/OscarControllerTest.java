@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * Created by hinri on 14.06.2016.
  */
 public class OscarControllerTest {
-    private OscarController oc;
+    private IOscarController oc;
     private ObservableList<Movie> movies;
 
     @Before

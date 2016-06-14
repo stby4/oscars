@@ -56,13 +56,14 @@ class OscarFXView extends VBox implements IOscarView {
         SortedList<Movie> moviesSorted = new SortedList<>(moviesFiltered);
         moviesSorted.comparatorProperty().bind(movieSelector.comparatorProperty());
 
-        movieSelector.setItems(moviesSorted);
+        movieSelector.setMovies(moviesSorted);
     }
 
     @Override
     public void onMovieSelected(Movie movie) {
         selectedMovie = movie;
         movieDetails.setMovie(selectedMovie);
+        toolBar.setMovie(selectedMovie);
     }
 
     @Override
@@ -72,8 +73,8 @@ class OscarFXView extends VBox implements IOscarView {
 
     private void initializeControls() {
         toolBar = new MovieFXTools(presenter, executeList, undoList);
-        movieSelector = new MovieFXSelector<>(presenter, this);
-        movieDetails = new MovieFXDetails(presenter, this);
+        movieSelector = new MovieFXSelector<>(presenter);
+        movieDetails = new MovieFXDetails(presenter);
     }
 
     private void layoutControls() {
