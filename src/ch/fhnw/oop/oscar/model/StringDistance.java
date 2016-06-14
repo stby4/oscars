@@ -31,7 +31,7 @@ public class StringDistance {
      * @param s2 second string
      * @return distance
      */
-    static double distance(String s1, String s2) {
+    public static double distance(String s1, String s2) {
         if (s1.equals(s2)) {
             return 0;
         }
