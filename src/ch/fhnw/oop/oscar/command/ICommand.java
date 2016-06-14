@@ -1,7 +1,5 @@
 package ch.fhnw.oop.oscar.command;
 
-import ch.fhnw.oop.oscar.model.IModel;
-
 /**
  * a command
  * Created by Hinrich on 12.06.2016.

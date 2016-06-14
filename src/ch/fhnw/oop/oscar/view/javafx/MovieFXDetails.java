@@ -342,9 +342,6 @@ class MovieFXDetails extends BorderPane {
         setMaxSize(600, Double.MAX_VALUE);
     }
 
-    private void removeEventHandlers() {
-    }
-
     private void addListeners() {
         disabledProperty().addListener((v, o, n) -> {
             if (n) {

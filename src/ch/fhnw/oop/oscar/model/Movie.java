@@ -13,7 +13,7 @@ import java.util.List;
  * Movie
  * Created by Hinrich on 31.05.2016.
  */
-public class Movie implements IModel {
+public class Movie {
     private IntegerProperty id = new SimpleIntegerProperty();
     private StringProperty title = new SimpleStringProperty();
     private StringProperty titleEn = new SimpleStringProperty();
@@ -246,7 +246,7 @@ public class Movie implements IModel {
         this.numberOscars.set(numberOscars);
     }
 
-    public Boolean getEdited() {
+    Boolean getEdited() {
         return edited.get();
     }
 

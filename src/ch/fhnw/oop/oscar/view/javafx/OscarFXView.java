@@ -81,14 +81,14 @@ class OscarFXView extends VBox implements IOscarView {
         //movieSelector.setPrefWidth();
         splitPane.getItems().add(0, movieSelector);
         splitPane.getItems().add(1, movieDetails);
+        splitPane.setDividerPositions(0.6f, 0.4f);
 
         VBox.setVgrow(splitPane, Priority.ALWAYS);
         splitPane.setMaxWidth(Double.MAX_VALUE);
         splitPane.setMaxHeight(Double.MAX_VALUE);
 
-
-        this.getChildren().add(0, toolBar);
-        this.getChildren().add(1, splitPane);
+        getChildren().add(0, toolBar);
+        getChildren().add(1, splitPane);
     }
 
     private void addEventHandlers() {

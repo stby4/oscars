@@ -1,8 +1,10 @@
 package ch.fhnw.oop.oscar;
 
+import ch.fhnw.oop.oscar.command.ICommand;
 import ch.fhnw.oop.oscar.model.Movie;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
 import java.time.LocalDate;
@@ -38,13 +40,29 @@ public interface IOscarPresenter {
     void onMoviesSaved();
 
     /**
+     * get list of executed commands
+     *
+     * @return list
+     */
+    ObservableList<ICommand> getExecuteList();
+
+    /**
+     * get list of "undone" commands
+     *
+     * @return list
+     */
+    ObservableList<ICommand> getUndoList();
+
+    /**
      * undo
+     *
      * @param number number of undos
      */
     void onUndo(int number);
 
     /**
      * redo
+     *
      * @param number number of redos
      */
     void onRedo(int number);

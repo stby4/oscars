@@ -35,10 +35,12 @@ public class OscarPresenter implements IOscarPresenter {
         undoList = controller.getUndoList();
     }
 
+    @Override
     public ObservableList<ICommand> getExecuteList() {
         return executeList;
     }
 
+    @Override
     public ObservableList<ICommand> getUndoList() {
         return undoList;
     }

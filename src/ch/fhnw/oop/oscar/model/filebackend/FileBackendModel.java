@@ -4,9 +4,7 @@ import ch.fhnw.oop.oscar.model.Movie;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -20,17 +18,30 @@ import java.util.*;
  */
 public class FileBackendModel {
     private ObservableList<Movie> movies = FXCollections.observableArrayList();
-    private final String readPath = "ressources/model/filebackend/movies.csv";
-    private final String rwPath = "ressources/model/filebackend/movies2.csv";
+    private String readPath = "ressources/model/filebackend/movies.csv";
+    private String rwPath = "ressources/model/filebackend/movies2.csv";
+
 
     public FileBackendModel() {
-        try {
-            readFile(Paths.get(rwPath));
-        } catch (Exception e) {
+        read();
+    }
+
+    FileBackendModel(String readPath, String rwPath) {
+        this.readPath = readPath;
+        this.rwPath = readPath;
+        read();
+    }
+
+    private void read() {
+        {
             try {
-                readFile(Paths.get(readPath));
-            } catch (Exception e2) {
-                // create empty interface
+                readFile(Paths.get(rwPath));
+            } catch (Exception e) {
+                try {
+                    readFile(Paths.get(readPath));
+                } catch (Exception e2) {
+                    // create empty interface
+                }
             }
         }
     }

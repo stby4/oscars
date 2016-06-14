@@ -21,6 +21,10 @@ public class OscarFXApplication extends Application {
         String url = getClass().getResource("oscars.css").toExternalForm();
         scene.getStylesheets().add(url);
 
+        primaryStage.setWidth(1200);
+        primaryStage.setMinWidth(700);
+        primaryStage.setMinHeight(800);
+        primaryStage.setHeight(800);
         primaryStage.setTitle(STRINGS.getString("Oscars"));
         primaryStage.setScene(scene);
         primaryStage.show();
