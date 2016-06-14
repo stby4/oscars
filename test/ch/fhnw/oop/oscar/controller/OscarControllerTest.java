@@ -80,6 +80,8 @@ public class OscarControllerTest {
     public void addMovie() throws Exception {
         oc.addMovie(movies);
         assertEquals(3, movies.size());
+        oc.undo(1);
+        assertEquals(2, movies.size());
     }
 
     @Test
@@ -87,6 +89,9 @@ public class OscarControllerTest {
         oc.deleteMovie(movies, movies.get(0));
         assertEquals(1, movies.size());
         assertEquals("Clint Eastwood, Hilary Swank", movies.get(0).getActors());
+
+        oc.undo(1);
+        assertEquals(2, movies.size());
     }
 
     @Test
@@ -101,80 +106,136 @@ public class OscarControllerTest {
 
     @Test
     public void setYearAward() throws Exception {
+        int origYear = movies.get(1).getYearAward();
+
         oc.setYearAward(movies.get(1), movies.get(1).getYearAward(), 2006);
         assertEquals(2006, movies.get(1).getYearAward());
         assertEquals(1, oc.getExecuteList().size());
+
+        oc.undo(1);
+        assertEquals(origYear, movies.get(1).getYearAward());
     }
 
     @Test
     public void setActors() throws Exception {
+        String origActors = movies.get(1).getActors();
+
         oc.setActors(movies.get(1), movies.get(1).getActors(), "Peter");
         assertEquals("Peter", movies.get(1).getActors());
         assertEquals(1, oc.getExecuteList().size());
+
+        oc.undo(1);
+        assertEquals(origActors, movies.get(1).getActors());
     }
 
     @Test
     public void setDirector() throws Exception {
+        String origDirector = movies.get(1).getDirector();
+
         oc.setDirector(movies.get(1), movies.get(1).getDirector(), "Hans");
         assertEquals("Hans", movies.get(1).getDirector());
         assertEquals(1, oc.getExecuteList().size());
+
+        oc.undo(1);
+        assertEquals(origDirector, movies.get(1).getDirector());
     }
 
     @Test
     public void setTitleEn() throws Exception {
+        String origTitleEn = movies.get(1).getTitleEn();
+
         oc.setTitleEn(movies.get(1), movies.get(1).getTitleEn(), "50 cent baby");
         assertEquals("50 cent baby", movies.get(1).getTitleEn());
         assertEquals(1, oc.getExecuteList().size());
+
+        oc.undo(1);
+        assertEquals(origTitleEn, movies.get(1).getTitleEn());
     }
 
     @Test
     public void setYearProduction() throws Exception {
+        int origYear = movies.get(1).getYearProduction();
+
         oc.setYearProduction(movies.get(1), movies.get(1).getYearProduction(), 2001);
         assertEquals(2001, movies.get(1).getYearProduction());
         assertEquals(1, oc.getExecuteList().size());
+
+        oc.undo(1);
+        assertEquals(origYear, movies.get(1).getYearProduction());
     }
 
     @Test
     public void setCountries() throws Exception {
+        String origCountries = movies.get(1).getCountries();
+
         oc.setCountries(movies.get(1), movies.get(1).getCountries(), "DE/EN/US");
         assertEquals("DE/EN/US", movies.get(1).getCountries());
         assertEquals(1, oc.getExecuteList().size());
+
+        oc.undo(1);
+        assertEquals(origCountries, movies.get(1).getCountries());
     }
 
     @Test
     public void setDuration() throws Exception {
+        int origDuration = movies.get(1).getDuration();
+
         oc.setDuration(movies.get(1), movies.get(1).getDuration(), 105);
         assertEquals(105, movies.get(1).getDuration());
         assertEquals(1, oc.getExecuteList().size());
+
+        oc.undo(1);
+        assertEquals(origDuration, movies.get(1).getDuration());
     }
 
     @Test
     public void setFsk() throws Exception {
+        int origFsk = movies.get(1).getFsk();
+
         oc.setFsk(movies.get(1), movies.get(1).getFsk(), 0);
         assertEquals(0, movies.get(1).getFsk());
         assertEquals(1, oc.getExecuteList().size());
+
+        oc.undo(1);
+        assertEquals(origFsk, movies.get(1).getFsk());
     }
 
     @Test
     public void setGenre() throws Exception {
+        String origGenre = movies.get(1).getGenre();
+
         oc.setGenre(movies.get(1), movies.get(1).getGenre(), "Komödie");
         assertEquals("Komödie", movies.get(1).getGenre());
         assertEquals(1, oc.getExecuteList().size());
+
+        oc.undo(1);
+        assertEquals(origGenre, movies.get(1).getGenre());
     }
 
     @Test
     public void setStartDate() throws Exception {
+        LocalDate origDate = movies.get(0).getStartDate();
+
         LocalDate now = LocalDate.now();
         oc.setStartDate(movies.get(0), movies.get(0).getStartDate(), now);
         assertEquals(now, movies.get(0).getStartDate());
         assertEquals(1, oc.getExecuteList().size());
+
+        oc.undo(1);
+
+        assertEquals(origDate, movies.get(0).getStartDate());
     }
 
     @Test
     public void setNumberOscars() throws Exception {
+        int origOscars = movies.get(1).getNumberOscars();
+
         oc.setNumberOscars(movies.get(1), movies.get(1).getNumberOscars(), 5);
         assertEquals(5, movies.get(1).getNumberOscars());
         assertEquals(1, oc.getExecuteList().size());
+
+        oc.undo(1);
+        assertEquals(origOscars, movies.get(1).getNumberOscars());
     }
 
 }

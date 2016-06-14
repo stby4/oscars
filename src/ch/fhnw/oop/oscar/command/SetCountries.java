@@ -20,6 +20,6 @@ public class SetCountries extends MovieCommand<String> {
 
     @Override
     public void undo() {
-        movie.setActors(oldValue);
+        movie.setCountries(oldValue);
     }
 }
