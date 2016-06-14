@@ -56,8 +56,8 @@ public class MovieTest {
         movie.setDuration(109);
         assertEquals(109, movie.getDuration());
 
-        movie.setFsk(6);
-        assertEquals(6, movie.getFsk());
+        movie.setFsk(Movie.Fsk.SIX);
+        assertEquals(Movie.Fsk.SIX, movie.getFsk());
 
         movie.setGenre("Comedy");
         assertEquals("Comedy", movie.getGenre());
@@ -91,7 +91,7 @@ public class MovieTest {
         assertEquals(2004, movie.getYearProduction());
         assertEquals("US", movie.getCountries());
         assertEquals(133, movie.getDuration());
-        assertEquals(12, movie.getFsk());
+        assertEquals(Movie.Fsk.TWELVE, movie.getFsk());
         assertEquals("Drama, Sportfilm", movie.getGenre());
         assertEquals(LocalDate.of(2005, 3, 24), movie.getStartDate());
         assertEquals(4, movie.getNumberOscars());

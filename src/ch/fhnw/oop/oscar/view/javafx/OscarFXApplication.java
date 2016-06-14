@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
  * Created by Hinrich on 31.05.2016.
  */
 public class OscarFXApplication extends Application {
-    private final ResourceBundle STRINGS =  ResourceBundle.getBundle("view.javafx.Strings");
+    private final ResourceBundle STRINGS = ResourceBundle.getBundle("view.javafx.Strings");
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -23,8 +23,8 @@ public class OscarFXApplication extends Application {
 
         primaryStage.setWidth(1200);
         primaryStage.setMinWidth(700);
-        primaryStage.setMinHeight(800);
-        primaryStage.setHeight(800);
+        primaryStage.setMinHeight(820);
+        primaryStage.setHeight(820);
         primaryStage.setTitle(STRINGS.getString("Oscars"));
         primaryStage.setScene(scene);
         primaryStage.show();

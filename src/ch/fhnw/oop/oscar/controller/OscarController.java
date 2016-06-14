@@ -116,7 +116,7 @@ public class OscarController {
         execute(command);
     }
 
-    public void setFsk(Movie movie, Integer oldFsk, Integer newFsk) {
+    public void setFsk(Movie movie, Movie.Fsk oldFsk, Movie.Fsk newFsk) {
         ICommand command = new SetFsk(movie, oldFsk, newFsk);
         execute(command);
     }

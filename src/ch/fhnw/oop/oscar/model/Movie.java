@@ -14,6 +14,25 @@ import java.util.List;
  * Created by Hinrich on 31.05.2016.
  */
 public class Movie {
+    public enum Fsk {
+        ZERO(0), SIX(6), TWELVE(12), SIXTEEN(16), EIGHTEEN(18);
+
+        private Integer value;
+
+        Fsk(Integer value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return value.toString();
+        }
+    }
+
     private IntegerProperty id = new SimpleIntegerProperty();
     private StringProperty title = new SimpleStringProperty();
     private StringProperty titleEn = new SimpleStringProperty();
@@ -23,7 +42,7 @@ public class Movie {
     private StringProperty actors = new SimpleStringProperty();
     private StringProperty countries = new SimpleStringProperty();
     private IntegerProperty duration = new SimpleIntegerProperty();
-    private IntegerProperty fsk = new SimpleIntegerProperty();
+    private ObjectProperty<Fsk> fsk = new SimpleObjectProperty<>();
     private StringProperty genre = new SimpleStringProperty();
     private ObjectProperty<LocalDate> startDate = new SimpleObjectProperty<>();
     private IntegerProperty numberOscars = new SimpleIntegerProperty();
@@ -45,7 +64,7 @@ public class Movie {
         setYearProduction(Calendar.getInstance().get(Calendar.YEAR));
         setCountries("");
         setDuration(90);
-        setFsk(0);
+        setFsk(Fsk.ZERO);
         setGenre("");
         setStartDate(LocalDate.now());
         setNumberOscars(1);
@@ -61,7 +80,24 @@ public class Movie {
         setYearProduction(Integer.valueOf(line.get(6)));
         setCountries(line.get(7));
         setDuration(Integer.valueOf(line.get(8)));
-        setFsk(Integer.valueOf(line.get(9)));
+
+        switch (Integer.valueOf(line.get(9))) {
+            case 6:
+                setFsk(Fsk.SIX);
+                break;
+            case 12:
+                setFsk(Fsk.TWELVE);
+                break;
+            case 16:
+                setFsk(Fsk.SIXTEEN);
+                break;
+            case 18:
+                setFsk(Fsk.EIGHTEEN);
+                break;
+            default:
+                setFsk(Fsk.ZERO);
+        }
+
         setGenre(line.get(10));
         try {
             setStartDate(LocalDate.parse(line.get(11), formatter));
@@ -198,15 +234,15 @@ public class Movie {
         this.duration.set(duration);
     }
 
-    public int getFsk() {
+    public Fsk getFsk() {
         return fsk.get();
     }
 
-    public IntegerProperty fskProperty() {
+    public ObjectProperty<Fsk> fskProperty() {
         return fsk;
     }
 
-    public void setFsk(int fsk) {
+    public void setFsk(Fsk fsk) {
         this.fsk.set(fsk);
     }
 

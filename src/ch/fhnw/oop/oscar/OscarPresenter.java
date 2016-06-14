@@ -151,7 +151,7 @@ public class OscarPresenter implements IOscarPresenter {
     }
 
     @Override
-    public void onFskChanged(Movie movie, Integer oldFsk, Integer newFsk) {
+    public void onFskChanged(Movie movie, Movie.Fsk oldFsk, Movie.Fsk newFsk) {
         if (null != movie) controller.setFsk(movie, oldFsk, newFsk);
     }
 

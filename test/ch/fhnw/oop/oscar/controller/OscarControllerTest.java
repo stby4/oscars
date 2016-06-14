@@ -190,10 +190,10 @@ public class OscarControllerTest {
 
     @Test
     public void setFsk() throws Exception {
-        int origFsk = movies.get(1).getFsk();
+        Movie.Fsk origFsk = movies.get(1).getFsk();
 
-        oc.setFsk(movies.get(1), movies.get(1).getFsk(), 0);
-        assertEquals(0, movies.get(1).getFsk());
+        oc.setFsk(movies.get(1), movies.get(1).getFsk(), Movie.Fsk.ZERO);
+        assertEquals(Movie.Fsk.ZERO, movies.get(1).getFsk());
         assertEquals(1, oc.getExecuteList().size());
 
         oc.undo(1);

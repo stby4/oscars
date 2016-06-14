@@ -84,7 +84,7 @@ public interface IOscarPresenter {
 
     void onDurationChanged(Movie movie, Integer oldDuration, Integer newDuration);
 
-    void onFskChanged(Movie movie, Integer oldFsk, Integer newFsk);
+    void onFskChanged(Movie movie, Movie.Fsk oldFsk, Movie.Fsk newFsk);
 
     void onGenreChanged(Movie movie, String oldGenre, String newGenre);
 

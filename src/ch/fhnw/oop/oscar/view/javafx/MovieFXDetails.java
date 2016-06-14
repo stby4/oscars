@@ -37,7 +37,7 @@ class MovieFXDetails extends BorderPane {
     private ChangeListener<Integer> yearProductionChanged;
     private ChangeListener<String> countriesChanged;
     private ChangeListener<Integer> durationChanged;
-    private ChangeListener<Integer> fskChanged;
+    private ChangeListener<Movie.Fsk> fskChanged;
     private ChangeListener<LocalDate> startDateChanged;
     private ChangeListener<Integer> numberOscarsChanged;
 
@@ -58,7 +58,7 @@ class MovieFXDetails extends BorderPane {
     private Spinner<Integer> yearProduction;
     private TextField countries;
     private Spinner<Integer> duration;
-    private ComboBox<Integer> fsk;
+    private ComboBox<Movie.Fsk> fsk;
     private DatePicker startDate;
     private Spinner<Integer> numberOscars;
 
@@ -221,13 +221,13 @@ class MovieFXDetails extends BorderPane {
         duration.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
 
         fsk = new ComboBox<>();
-        fsk.getItems().addAll(0, 6, 12, 16, 18);
-        fsk.setCellFactory(new Callback<ListView<Integer>, ListCell<Integer>>() {
+        fsk.getItems().addAll(Movie.Fsk.ZERO, Movie.Fsk.SIX, Movie.Fsk.TWELVE, Movie.Fsk.SIXTEEN, Movie.Fsk.EIGHTEEN);
+        fsk.setCellFactory(new Callback<ListView<Movie.Fsk>, ListCell<Movie.Fsk>>() {
             @Override
-            public ListCell<Integer> call(ListView<Integer> param) {
-                return new ListCell<Integer>() {
+            public ListCell<Movie.Fsk> call(ListView<Movie.Fsk> param) {
+                return new ListCell<Movie.Fsk>() {
                     @Override
-                    protected void updateItem(Integer item, boolean empty) {
+                    protected void updateItem(Movie.Fsk item, boolean empty) {
                         super.updateItem(item, empty);
 
                         if (null == item || empty) {
@@ -369,7 +369,7 @@ class MovieFXDetails extends BorderPane {
                 if (null != duration.getValueFactory()) {
                     duration.getValueFactory().setValue(0);
                 }
-                fsk.setValue(0);
+                fsk.setValue(Movie.Fsk.ZERO);
                 startDate.setValue(null);
                 if (null != numberOscars.getValueFactory()) {
                     numberOscars.getValueFactory().setValue(0);
