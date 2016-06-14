@@ -10,8 +10,7 @@ public class SetYearAward extends MovieCommand<Integer> implements ICommand {
 
     public SetYearAward(Movie movie, Integer oldYear, Integer newYear) {
         super(movie, oldYear, newYear);
-        description.append("Changed award year from ");
-        description.append(oldYear).append(" to ").append(newYear).append(".");
+        description.append(String.format(STRINGS.getString("ChangedYearAward"), oldValue, newValue));
     }
 
     @Override

@@ -10,8 +10,7 @@ public class SetGenre extends MovieCommand<String> {
     public SetGenre(Movie movie, String oldValue, String newValue) {
         super(movie, oldValue, newValue);
 
-        description.append("Set Genre from ");
-        description.append(oldValue).append(" to ").append(newValue).append(".");
+        description.append(String.format(STRINGS.getString("ChangedGenre"), oldValue, newValue));
     }
 
     @Override

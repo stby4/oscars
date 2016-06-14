@@ -10,8 +10,7 @@ public class SetDirector extends MovieCommand<String> {
 
     public SetDirector(Movie movie, String oldDirector, String newDirector) {
         super(movie, oldDirector, newDirector);
-        description.append("Changed Director from ");
-        description.append(oldValue).append(" to ").append(newValue).append(".");
+        description.append(String.format(STRINGS.getString("ChangedDirector"), oldValue, newValue));
     }
 
     @Override

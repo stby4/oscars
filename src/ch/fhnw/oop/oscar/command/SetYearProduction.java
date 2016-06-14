@@ -9,8 +9,7 @@ import ch.fhnw.oop.oscar.model.Movie;
 public class SetYearProduction extends MovieCommand<Integer> {
     public SetYearProduction(Movie movie, Integer oldValue, Integer newValue) {
         super(movie, oldValue, newValue);
-        description.append("Changed production year from ");
-        description.append(oldValue).append(" to ").append(newValue);
+        description.append(String.format(STRINGS.getString("ChangedYearProduction"), oldValue, newValue));
     }
 
     @Override

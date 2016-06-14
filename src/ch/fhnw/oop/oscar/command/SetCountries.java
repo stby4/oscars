@@ -9,8 +9,7 @@ import ch.fhnw.oop.oscar.model.Movie;
 public class SetCountries extends MovieCommand<String> {
     public SetCountries(Movie movie, String oldValue, String newValue) {
         super(movie, oldValue, newValue);
-        description.append("Changed countries from");
-        description.append(oldValue).append(" to ").append(newValue).append(".");
+        description.append(String.format(STRINGS.getString("ChangedCountries"), oldValue, newValue));
     }
 
     @Override

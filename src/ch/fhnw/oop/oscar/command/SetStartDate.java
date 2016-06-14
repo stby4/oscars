@@ -3,6 +3,8 @@ package ch.fhnw.oop.oscar.command;
 import ch.fhnw.oop.oscar.model.Movie;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 /**
  * set start date
@@ -11,8 +13,9 @@ import java.time.LocalDate;
 public class SetStartDate extends MovieCommand<LocalDate> {
     public SetStartDate(Movie movie, LocalDate oldValue, LocalDate newValue) {
         super(movie, oldValue, newValue);
+        DateTimeFormatter fmt = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
-        description.append("Changed start date from ").append(oldValue).append(" to ").append(newValue).append(".");
+        description.append(String.format(STRINGS.getString("ChangedStartDate"), (null == oldValue ? "-" : fmt.format(oldValue)), fmt.format(newValue)));
     }
 
     @Override

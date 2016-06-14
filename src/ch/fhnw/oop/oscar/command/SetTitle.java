@@ -10,8 +10,7 @@ public class SetTitle extends MovieCommand<String> implements ICommand {
 
     public SetTitle(Movie movie, String oldTitle, String newTitle) {
         super(movie, oldTitle, newTitle);
-        description.append("Changed title from ");
-        description.append(oldTitle).append(" to ").append(newTitle).append(".");
+        description.append(String.format(STRINGS.getString("ChangedTitle"), oldValue, newValue));
     }
 
     @Override

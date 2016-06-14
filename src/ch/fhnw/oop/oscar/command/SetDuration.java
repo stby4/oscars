@@ -9,8 +9,7 @@ import ch.fhnw.oop.oscar.model.Movie;
 public class SetDuration extends MovieCommand<Integer> {
     public SetDuration(Movie movie, Integer oldValue, Integer newValue) {
         super(movie, oldValue, newValue);
-        description.append("Changed duration from ");
-        description.append(oldValue).append(" to ").append(newValue).append(".");
+        description.append(String.format(STRINGS.getString("ChangedDuration"), oldValue, newValue));
     }
 
     @Override

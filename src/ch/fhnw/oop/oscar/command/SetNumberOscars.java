@@ -10,7 +10,7 @@ public class SetNumberOscars extends MovieCommand<Integer> {
     public SetNumberOscars(Movie movie, Integer oldValue, Integer newValue) {
         super(movie, oldValue, newValue);
 
-        description.append("Changed number of oscars from ").append(oldValue).append(" to ").append(newValue).append(".");
+        description.append(String.format(STRINGS.getString("ChangedNumberOscars"), oldValue, newValue));
     }
 
     @Override
